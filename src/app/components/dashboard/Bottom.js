@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
@@ -20,29 +20,43 @@ ChartJS.register(
   Title,
   CategoryScale,
   Tooltip,
-  Legend
+  Legend,
 );
 
 const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export default function CardLineChart() {
   const [monthlyRevenue, setMonthlyRevenue] = useState([]);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   useEffect(() => {
     const fetchMonthlyRevenue = async () => {
-      const response = await fetch('/api/dashboard/data');
+      const response = await fetch(`${apiBaseUrl}/api/dashboard/data`);
       const data = await response.json();
 
       // Map API data to revenue per month, filling missing months with 0
       const revenueMap = {};
-      data.forEach(item => {
+      data.forEach((item) => {
         revenueMap[item.month] = item.revenue;
       });
 
-      const revenueArray = MONTHS.map(month => revenueMap[month] || 0);
+      const revenueArray = MONTHS.map((month) => revenueMap[month] || 0);
       setMonthlyRevenue(revenueArray);
     };
 
@@ -74,7 +88,7 @@ export default function CardLineChart() {
         maintainAspectRatio: false,
         interaction: {
           intersect: false,
-          mode: 'index',
+          mode: "index",
         },
         plugins: {
           legend: {
@@ -85,7 +99,7 @@ export default function CardLineChart() {
           x: {
             offset: true,
             ticks: {
-              color: "#6b7280"
+              color: "#6b7280",
             },
             grid: {
               color: "#e5e7eb",
@@ -117,7 +131,9 @@ export default function CardLineChart() {
     <div className="bg-gray-100 rounded-xl shadow p-3 sm:p-6 mb-4 sm:mb-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 gap-2 sm:gap-0">
         <div>
-          <h1 className="text-base sm:text-lg font-bold text-gray-700">Revenue</h1>
+          <h1 className="text-base sm:text-lg font-bold text-gray-700">
+            Revenue
+          </h1>
         </div>
         <select className="border text-xs sm:text-sm px-2 py-1 rounded w-fit self-start sm:self-auto">
           <option>Monthly</option>

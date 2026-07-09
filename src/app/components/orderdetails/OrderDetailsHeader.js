@@ -5,12 +5,18 @@ import { useState, useEffect } from "react";
 export default function OrderDetailsHeader({ orderId }) {
   const [orderData, setOrderData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   useEffect(() => {
     if (orderId) {
       const fetchOrderData = async () => {
         try {
-          const response = await fetch(`/api/orders/order/${orderId}`);
+          const response = await fetch(
+            `${apiBaseUrl}/api/orders/order/${orderId}`,
+          );
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -24,7 +30,7 @@ export default function OrderDetailsHeader({ orderId }) {
             orderId: orderId,
             orderDate: "05 April, 2025 09.30 am",
             paymentStatus: "Pending",
-            paymentMethod: "Online Payment"
+            paymentMethod: "Online Payment",
           });
         } finally {
           setLoading(false);
@@ -41,7 +47,6 @@ export default function OrderDetailsHeader({ orderId }) {
       {/* Header row: title + button group */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Order Details</h2>
-
       </div>
       {/* Details grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -49,24 +54,32 @@ export default function OrderDetailsHeader({ orderId }) {
           <p className="text-sm text-gray-600">Order ID</p>
           <p className="font-bold text-lg">#{orderData?.orderId || orderId}</p>
           <p className="text-sm text-gray-600 mt-2">Payment Status:</p>
-          <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-medium ${
-            orderData?.paymentStatus === "Paid" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-          }`}>
+          <span
+            className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-medium ${
+              orderData?.paymentStatus === "Paid"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
             {orderData?.paymentStatus || "Pending"}
           </span>
         </div>
         <div>
           <p className="text-sm text-gray-600">Order date</p>
-          <p className="font-bold text-lg">{orderData?.orderDate ? (() => {
-            const date = new Date(orderData.orderDate);
-            return `${date.getFullYear()}-${date.toLocaleString('default', { month: 'long' })}-${date.getDate().toString().padStart(2, '0')}`;
-          })() : "Loading..."}</p>
+          <p className="font-bold text-lg">
+            {orderData?.orderDate
+              ? (() => {
+                  const date = new Date(orderData.orderDate);
+                  return `${date.getFullYear()}-${date.toLocaleString("default", { month: "long" })}-${date.getDate().toString().padStart(2, "0")}`;
+                })()
+              : "Loading..."}
+          </p>
           {orderData?.paymentReceipt ? (
             <button
               onClick={() => {
-                const link = document.createElement('a');
+                const link = document.createElement("a");
                 link.href = `/api/orders/order/${orderId}/receipt`;
-                const ext = orderData.paymentReceipt.split('.').pop();
+                const ext = orderData.paymentReceipt.split(".").pop();
                 link.download = `receipt_${orderId}.${ext}`;
                 link.click();
               }}

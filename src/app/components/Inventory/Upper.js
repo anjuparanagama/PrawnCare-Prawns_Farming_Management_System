@@ -1,17 +1,22 @@
-'use client';
-import { useState, useEffect } from 'react';
+"use client";
+import { useState, useEffect } from "react";
 
 export default function InventoryPage() {
-  const [id, setItemID] = useState('');
-  const [qty, setQty] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [id, setItemID] = useState("");
+  const [qty, setQty] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [items, setItems] = useState([]);
 
-  const [idIssue, setIdIssue] = useState('');
-  const [qtyIssue, setQtyIssue] = useState('');
-  const [dateIssue, setDateIssue] = useState(new Date().toISOString().split('T')[0]);
+  const [idIssue, setIdIssue] = useState("");
+  const [qtyIssue, setQtyIssue] = useState("");
+  const [dateIssue, setDateIssue] = useState(
+    new Date().toISOString().split("T")[0],
+  );
 
-
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -33,7 +38,7 @@ export default function InventoryPage() {
     }
 
     try {
-      const res = await fetch(`/api/inventory/update/${id}`, {
+      const res = await fetch(`${apiBaseUrl}/api/inventory/update/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ qty, date }),
@@ -49,19 +54,20 @@ export default function InventoryPage() {
 
       if (data.success) {
         alert(data.message || "Item updated successfully");
-        setItemID('');
-        setQty('');
-        setDate(new Date().toISOString().split('T')[0]);
+        setItemID("");
+        setQty("");
+        setDate(new Date().toISOString().split("T")[0]);
       } else {
         alert(data.message || "Error updating item. Please try again.");
       }
-
     } catch (error) {
       console.error("Error:", error);
       if (error.message.includes("Server returned")) {
         alert("Server error. Please check if the backend is running.");
       } else if (error.message.includes("Unexpected token")) {
-        alert("Server error: Invalid response format. Please check if the backend is running correctly.");
+        alert(
+          "Server error: Invalid response format. Please check if the backend is running correctly.",
+        );
       } else {
         alert("Network error. Please check your connection and try again.");
       }
@@ -88,7 +94,7 @@ export default function InventoryPage() {
     }
 
     try {
-      const res = await fetch(`/api/inventory/issue/${idIssue}`, {
+      const res = await fetch(`${apiBaseUrl}/api/inventory/issue/${idIssue}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ qty: qtyIssue, date: dateIssue }),
@@ -104,19 +110,20 @@ export default function InventoryPage() {
 
       if (data.success) {
         alert(data.message || "Item issued successfully");
-        setIdIssue('');
-        setQtyIssue('');
-        setDateIssue(new Date().toISOString().split('T')[0]);
+        setIdIssue("");
+        setQtyIssue("");
+        setDateIssue(new Date().toISOString().split("T")[0]);
       } else {
         alert(data.message || "Error issuing item. Please try again.");
       }
-
     } catch (error) {
       console.error("Error:", error);
       if (error.message.includes("Server returned")) {
         alert("Server error. Please check if the backend is running.");
       } else if (error.message.includes("Unexpected token")) {
-        alert("Server error: Invalid response format. Please check if the backend is running correctly.");
+        alert(
+          "Server error: Invalid response format. Please check if the backend is running correctly.",
+        );
       } else {
         alert("Network error. Please check your connection and try again.");
       }
@@ -125,20 +132,20 @@ export default function InventoryPage() {
 
   useEffect(() => {
     fetch("/api/inventory/items")
-    .then((res) => res.json())
-    .then((data) => {
-      if (data && Array.isArray(data)) {
-        setItems(data);
-        // Don't automatically select first item - let user choose
-      }
-    })
-    .catch((err) => console.log("Error fetching items:", err));
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && Array.isArray(data)) {
+          setItems(data);
+          // Don't automatically select first item - let user choose
+        }
+      })
+      .catch((err) => console.log("Error fetching items:", err));
   }, []);
 
-    const download = () => {
-      window.open("http://localhost:5000/api/inventory/downloadpdf", "_blank")
-      alert("Download successfully")
-    };
+  const download = () => {
+    window.open(`${apiBaseUrl}/api/inventory/downloadpdf`, "_blank");
+    alert("Download successfully");
+  };
 
   return (
     <div className="bg-white">
@@ -147,7 +154,10 @@ export default function InventoryPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4">
           <h1 className="text-2xl font-bold text-[#1C00B8]">Inventory</h1>
-          <button onClick={download} className="flex items-center gap-1 px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm hover:bg-gray-100 transition-colors">
+          <button
+            onClick={download}
+            className="flex items-center gap-1 px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm hover:bg-gray-100 transition-colors"
+          >
             <p>Download Inventory report : </p>
             <span>⬇</span>
             <span>Export</span>
@@ -156,7 +166,9 @@ export default function InventoryPage() {
 
         {/*Issue Items Header */}
         <div className="bg-[#DDE6FF] rounded-md p-3 mb-4">
-          <h2 className="text-center text-blue-900 italic text-sm font-medium sm:text-base">Issue Items</h2>
+          <h2 className="text-center text-blue-900 italic text-sm font-medium sm:text-base">
+            Issue Items
+          </h2>
         </div>
 
         {/* Form Container */}
@@ -164,10 +176,8 @@ export default function InventoryPage() {
           <div className="mt-2 sm:mt-4">
             {/* Mobile Layout (stacked) */}
             <div className="flex flex-col space-y-4 sm:space-y-6">
-              
               {/* Desktop/Tablet: Two columns, Mobile: Single column */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
-                
                 {/* Left Column */}
                 <div className="space-y-4 sm:space-y-6">
                   {/* Item ID */}
@@ -228,7 +238,8 @@ export default function InventoryPage() {
                     <div className="min-w-0 sm:min-w-[80px] lg:min-w-[100px]"></div>
                     <button
                       onClick={handleIssue}
-                      className="w-full bg-[#0616F9] text-white font-medium text-sm px-6 py-3 rounded-md hover:bg-blue-600">
+                      className="w-full bg-[#0616F9] text-white font-medium text-sm px-6 py-3 rounded-md hover:bg-blue-600"
+                    >
                       Issue
                     </button>
                   </div>
@@ -240,7 +251,9 @@ export default function InventoryPage() {
 
         {/* Issue Items Header */}
         <div className="bg-[#DDE6FF] rounded-md p-3 mt-8 mb-4">
-          <h2 className="text-center text-blue-900 italic text-sm font-medium sm:text-base">Update Items</h2>
+          <h2 className="text-center text-blue-900 italic text-sm font-medium sm:text-base">
+            Update Items
+          </h2>
         </div>
 
         {/* Form Container */}
@@ -248,10 +261,8 @@ export default function InventoryPage() {
           <div className="mt-2 sm:mt-4">
             {/* Mobile Layout (stacked) */}
             <div className="flex flex-col space-y-4 sm:space-y-6">
-              
               {/* Desktop/Tablet: Two columns, Mobile: Single column */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
-                
                 {/* Left Column */}
                 <div className="space-y-4 sm:space-y-6">
                   {/* Item ID */}
@@ -312,7 +323,8 @@ export default function InventoryPage() {
                     <div className="min-w-0 sm:min-w-[80px] lg:min-w-[100px]"></div>
                     <button
                       onClick={handleUpdate}
-                      className="w-full bg-[#0616F9] text-white font-medium text-sm px-6 py-3 rounded-md hover:bg-blue-600">
+                      className="w-full bg-[#0616F9] text-white font-medium text-sm px-6 py-3 rounded-md hover:bg-blue-600"
+                    >
                       Update
                     </button>
                   </div>
@@ -320,8 +332,8 @@ export default function InventoryPage() {
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
-  </div>
   );
 }

@@ -20,10 +20,14 @@ function Header() {
       key: "selection",
     },
   ]);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   const formattedRange = `${format(range[0].startDate, "dd MMM yyyy")} - ${format(
     range[0].endDate,
-    "dd MMM yyyy"
+    "dd MMM yyyy",
   )}`;
 
   const handleChange = (e) => {
@@ -34,7 +38,9 @@ function Header() {
     try {
       const startDate = format(range[0].startDate, "yyyy-MM-dd");
       const endDate = format(range[0].endDate, "yyyy-MM-dd");
-      const res = await fetch(`/api/waterquality/downloadpdf?start=${startDate}&end=${endDate}`);
+      const res = await fetch(
+        `${apiBaseUrl}/api/waterquality/downloadpdf?start=${startDate}&end=${endDate}`,
+      );
       if (!res.ok) throw new Error("Failed to download PDF");
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -54,7 +60,9 @@ function Header() {
     <div className="p-3 sm:p-4 md:p-6 lg:p-8 mx-auto w-full bg-white">
       {/* Header with buttons on the right */}
       <div className="flex justify-between items-center mb-4 sm:mb-6 lg:mb-8">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1C00B8]">Water Quality</h1>
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1C00B8]">
+          Water Quality
+        </h1>
         <div className="flex flex-row gap-2 sm:gap-3 lg:gap-4 items-center">
           <button
             onClick={() => setShowCalendar(!showCalendar)}
@@ -64,8 +72,9 @@ function Header() {
             <span className="font-medium">{formattedRange}</span>
           </button>
           <button
-              onClick={handleDownload}
-              className="border border-gray-300 px-3 py-2 rounded-md text-xs sm:text-sm flex items-center gap-2 shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200">
+            onClick={handleDownload}
+            className="border border-gray-300 px-3 py-2 rounded-md text-xs sm:text-sm flex items-center gap-2 shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200"
+          >
             <FaDownload className="text-gray-600 text-xs sm:text-sm" />
             <span className="font-medium">Download PDF</span>
           </button>

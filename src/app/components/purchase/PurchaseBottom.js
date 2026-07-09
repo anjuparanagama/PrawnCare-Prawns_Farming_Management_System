@@ -1,28 +1,32 @@
 "use client";
 
-import React , { useState, useEffect }from 'react';
+import React, { useState, useEffect } from "react";
 
 export const PurchaseBottom = () => {
-
   const [purchaseData, setPurchaseData] = useState([]);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   useEffect(() => {
     const fetchPurchaseData = async () => {
       try {
-        const response = await fetch('/api/purchase/purchased-items-details');
+        const response = await fetch(
+          `${apiBaseUrl}/api/purchase/purchased-items-details`,
+        );
         if (!response.ok) {
-          throw new Error('Failed to fetch purchase data');
+          throw new Error("Failed to fetch purchase data");
         }
         const data = await response.json();
         // Map API data to table format
 
-        const formattedData = data.map(item => [
-
+        const formattedData = data.map((item) => [
           item.supply_order_id,
 
           item.name,
 
-          new Date(item.order_date).toISOString().split('T')[0], // Format date to YYYY-MM-DD
+          new Date(item.order_date).toISOString().split("T")[0], // Format date to YYYY-MM-DD
 
           item.supplier_name,
 
@@ -30,8 +34,7 @@ export const PurchaseBottom = () => {
 
           `Rs. ${item.price.toLocaleString()}`, // Format price with Rs. and commas
 
-          item.status
-
+          item.status,
         ]);
 
         setPurchaseData(formattedData);
@@ -46,11 +49,8 @@ export const PurchaseBottom = () => {
   return (
     <div className="bg-blue-100 rounded shadow overflow-x-auto mt-6">
       <table className="w-full text-sm min-w-[600px]">
-
         <thead>
-
           <tr className="bg-blue-200 text-left">
-
             <th className="px-4 py-2">Purch. ID</th>
 
             <th className="px-4 py-2">ITEM NAME</th>
@@ -64,9 +64,7 @@ export const PurchaseBottom = () => {
             <th className="px-4 py-2">PRICE</th>
 
             <th className="px-4 py-2">STATUS</th>
-
           </tr>
-
         </thead>
 
         <tbody className="bg-white">
@@ -87,6 +85,5 @@ export const PurchaseBottom = () => {
     </div>
   );
 };
-
 
 export default PurchaseBottom;

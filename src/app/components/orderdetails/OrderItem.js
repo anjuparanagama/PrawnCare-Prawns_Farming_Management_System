@@ -4,12 +4,18 @@ import { useState, useEffect } from "react";
 export default function OrderItem({ orderId }) {
   const [orderItems, setOrderItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   useEffect(() => {
     if (orderId) {
       const fetchOrderItems = async () => {
         try {
-          const response = await fetch(`/api/orders/order/${orderId}/items`);
+          const response = await fetch(
+            `${apiBaseUrl}/api/orders/order/${orderId}/items`,
+          );
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -19,8 +25,16 @@ export default function OrderItem({ orderId }) {
           console.error("Error fetching order items:", err);
           // Fallback to hardcoded data if API fails
           setOrderItems([
-            { name: "Tiger Prawns (Large)", quantity: "250 Kg", price: "Rs. 25,000.00" },
-            { name: "Tiger Prawns (Small)", quantity: "250 Kg", price: "Rs. 25,000.00" }
+            {
+              name: "Tiger Prawns (Large)",
+              quantity: "250 Kg",
+              price: "Rs. 25,000.00",
+            },
+            {
+              name: "Tiger Prawns (Small)",
+              quantity: "250 Kg",
+              price: "Rs. 25,000.00",
+            },
           ]);
         } finally {
           setLoading(false);
@@ -44,13 +58,18 @@ export default function OrderItem({ orderId }) {
               index < orderItems.length - 1 ? "border-b border-blue-100" : ""
             }`}
           >
-            <span className="font-medium text-base">{item.name || item.prawnType}</span>
-            <span className="text-gray-600 text-sm md:text-base">Quantity : {item.quantity}</span>
-            <span className="font-semibold text-base">{item.price || `Rs. ${item.amount || "0.00"}`}</span>
+            <span className="font-medium text-base">
+              {item.name || item.prawnType}
+            </span>
+            <span className="text-gray-600 text-sm md:text-base">
+              Quantity : {item.quantity}
+            </span>
+            <span className="font-semibold text-base">
+              {item.price || `Rs. ${item.amount || "0.00"}`}
+            </span>
           </div>
         ))}
       </div>
     </div>
   );
 }
-   

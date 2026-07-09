@@ -1,22 +1,26 @@
-'use client';
-import { useState, useEffect } from 'react';
+"use client";
+import { useState, useEffect } from "react";
 
 export default function Assigntask() {
-  const [id, setItemID] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [id, setItemID] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [items, setItems] = useState([]);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   const handleUpdate = async (e) => {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`/api/dashboard/assign-task/${id}`, {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${apiBaseUrl}/api/dashboard/assign-task/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ title, description }),
       });
@@ -24,10 +28,9 @@ export default function Assigntask() {
       const data = await res.json();
       alert(data.message || "Task assigned successfully!");
 
-      setItemID('');
-      setTitle('');
-      setDescription('');
-
+      setItemID("");
+      setTitle("");
+      setDescription("");
     } catch (error) {
       console.error("Error:", error);
       if (error.message.includes("Server returned")) {
@@ -40,16 +43,16 @@ export default function Assigntask() {
 
   useEffect(() => {
     fetch("/api/dashboard/getworkerdetails")
-    .then((res) => res.json())
-    .then((data) => {
-      if (data && Array.isArray(data)) {
-        setItems(data);
-        if (data.length > 0) {
-          setItemID(data[0].id);
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && Array.isArray(data)) {
+          setItems(data);
+          if (data.length > 0) {
+            setItemID(data[0].id);
+          }
         }
-      }
-    })
-    .catch((err) => console.log("Error fetching items:", err)); 
+      })
+      .catch((err) => console.log("Error fetching items:", err));
   }, []);
 
   return (
@@ -58,7 +61,9 @@ export default function Assigntask() {
       <div className="w-full bg-gray-50">
         {/* Update Items Header */}
         <div className="bg-[#DDE6FF] rounded-md p-3 mb-4">
-          <h2 className="text-center text-[#0019FA] italic text-sm font-medium sm:text-base">Assign Task</h2>
+          <h2 className="text-center text-[#0019FA] italic text-sm font-medium sm:text-base">
+            Assign Task
+          </h2>
         </div>
 
         {/* Form Container */}
@@ -66,10 +71,8 @@ export default function Assigntask() {
           <div className="mt-2 sm:mt-4">
             {/* Mobile Layout (stacked) */}
             <div className="flex flex-col space-y-4 sm:space-y-6">
-              
               {/* Desktop/Tablet: Two columns, Mobile: Single column */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
-                
                 {/* Left Column */}
                 <div className="space-y-4 sm:space-y-6">
                   {/* Item ID */}
@@ -129,7 +132,8 @@ export default function Assigntask() {
                     <div className="min-w-0 sm:min-w-[80px] lg:min-w-[100px]"></div>
                     <button
                       onClick={handleUpdate}
-                      className="w-full sm:flex-1 lg:w-60 bg-[#0616F9] text-white px-4 py-2 sm:py-2.5 rounded-md hover:bg-blue-600 transition-colors font-medium text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                      className="w-full sm:flex-1 lg:w-60 bg-[#0616F9] text-white px-4 py-2 sm:py-2.5 rounded-md hover:bg-blue-600 transition-colors font-medium text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
                       Assign Task
                     </button>
                   </div>
