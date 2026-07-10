@@ -11,24 +11,22 @@ export default async function OrderDetails({ params }) {
     <div className="min-h-screen bg-white">
       {/* Main Content */}
       <div className="flex-1 w-full lg:w-auto">
-        <div className="p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
-            {/* Order Details Card */}
-            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
-              <div className="p-4 sm:p-6 lg:p-8 border border-gray-200 rounded-lg">
-                <OrderDetailsHeader orderId={orderId} />
-                <OrderItem orderId={orderId} />
-              </div>
+        <div className="p-8 gap-4">
+          {/* Order Details Card */}
+          <div className="bg-white mb-4 rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+            <div className="p-4 sm:p-6 lg:p-8 border border-gray-200 rounded-lg">
+              <OrderDetailsHeader orderId={orderId} />
+              <OrderItem orderId={orderId} />
             </div>
+          </div>
 
-            {/* Bottom Cards */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-              <div className="bg-white rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
-                <CustomerInfo orderId={orderId} />
-              </div>
-              <div className="bg-white rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
-                <OrderStatus orderId={orderId} />
-              </div>
+          {/* Bottom Cards */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+              <CustomerInfo orderId={orderId} />
+            </div>
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+              <OrderStatus orderId={orderId} />
             </div>
           </div>
         </div>

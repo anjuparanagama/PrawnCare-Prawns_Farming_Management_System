@@ -76,7 +76,7 @@ export default function OrderTable() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="w-[1200px] mx-5 px-6 p-3">
+    <div>
       <Searchbar onFilter={handleFilter} />
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
