@@ -131,7 +131,7 @@ export default function InventoryPage() {
   };
 
   useEffect(() => {
-    fetch("/api/inventory/items")
+    fetch(`${apiBaseUrl}/api/inventory/items`)
       .then((res) => res.json())
       .then((data) => {
         if (data && Array.isArray(data)) {

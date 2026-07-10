@@ -251,9 +251,6 @@ export default function User() {
 
   return (
     <div className="bg-white h-screen flex flex-row text-blue-700 overflow-hidden">
-      {/* Left Space */}
-      <div className="w-1/6 h-full bg-cyan-50"></div>
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col pt-7 px-8 pb-4 min-h-0">
         <div className="text-2xl font-bold mb-4 py-0 text-[#1C00B8]">

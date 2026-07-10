@@ -69,7 +69,7 @@ export default function OrderTable() {
   };
 
   const handleRowClick = (orderId) => {
-    router.push(`${apiBaseUrl}/Orders/${orderId}`);
+    router.push(`/Orders/${orderId}`);
   };
 
   if (loading) return <div>Loading...</div>;
