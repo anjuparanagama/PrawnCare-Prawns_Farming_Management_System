@@ -1,10 +1,14 @@
-'use client';
-import { useState } from 'react';
+"use client";
+import { useState } from "react";
 
 export default function AddInventory() {
-  const [itemName, setItemName] = useState('');
-  const [qty, setQty] = useState('');
-  const [type, setType] = useState('');
+  const [itemName, setItemName] = useState("");
+  const [qty, setQty] = useState("");
+  const [type, setType] = useState("");
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   const handleAdd = async (e) => {
     e.preventDefault();
@@ -24,7 +28,7 @@ export default function AddInventory() {
     }
 
     try {
-      const res = await fetch("/api/inventory/add", {
+      const res = await fetch(`${apiBaseUrl}/api/inventory/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ itemName, qty, type }),
@@ -37,12 +41,12 @@ export default function AddInventory() {
       }
 
       const data = await res.json();
-      
+
       if (data.success) {
         alert(data.message || "Item added successfully");
-        setItemName('');
-        setType('');
-        setQty('');
+        setItemName("");
+        setType("");
+        setQty("");
       } else {
         alert(data.message || "Error adding item. Please try again.");
       }
@@ -57,8 +61,8 @@ export default function AddInventory() {
   };
 
   return (
-    <div className="bg-white ">
-      <div className="w-full sm:p-4 md:p-6 -mt-8 pt-[-20px]">
+    <div>
+      <div>
         <div className="bg-blue-100 rounded-md p-3 mb-2 sm:mb-3">
           <h2 className="text-center text-blue-900 italic text-sm sm:text-base font-medium">
             New Items
@@ -72,7 +76,9 @@ export default function AddInventory() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
                 <div className="space-y-4 lg:space-y-5">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <label className="text-sm font-medium sm:min-w-[100px] lg:min-w-[120px]">Item Name</label>
+                    <label className="text-sm font-medium sm:min-w-[100px] lg:min-w-[120px]">
+                      Item Name
+                    </label>
                     <input
                       type="text"
                       value={itemName}
@@ -83,7 +89,9 @@ export default function AddInventory() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <label className="text-sm font-medium sm:min-w-[100px] lg:min-w-[120px]">Type</label>
+                    <label className="text-sm font-medium sm:min-w-[100px] lg:min-w-[120px]">
+                      Type
+                    </label>
                     <select
                       value={type}
                       onChange={(e) => setType(e.target.value)}
@@ -100,7 +108,9 @@ export default function AddInventory() {
 
                 <div className="space-y-4 lg:space-y-5">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <label className="text-sm font-medium sm:min-w-[100px] lg:min-w-[120px]">Quantity</label>
+                    <label className="text-sm font-medium sm:min-w-[100px] lg:min-w-[120px]">
+                      Quantity
+                    </label>
                     <input
                       type="number"
                       value={qty}
@@ -115,7 +125,8 @@ export default function AddInventory() {
                     <div className="sm:min-w-[100px] lg:min-w-[120px]"></div>
                     <button
                       onClick={handleAdd}
-                      className="w-full sm:flex-1 lg:w-60 bg-[#0616F9] text-white px-6 py-2.5 rounded-md hover:bg-blue-600">
+                      className="w-full sm:flex-1 lg:w-60 bg-[#0616F9] text-white px-6 py-2.5 rounded-md hover:bg-blue-600"
+                    >
                       ADD ITEM
                     </button>
                   </div>
@@ -126,7 +137,9 @@ export default function AddInventory() {
             {/* Mobile Layout */}
             <div className="block sm:hidden space-y-5">
               <div>
-                <label className="block text-sm font-medium mb-2">Item Name</label>
+                <label className="block text-sm font-medium mb-2">
+                  Item Name
+                </label>
                 <input
                   type="text"
                   value={itemName}
@@ -137,7 +150,9 @@ export default function AddInventory() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Quantity</label>
+                <label className="block text-sm font-medium mb-2">
+                  Quantity
+                </label>
                 <input
                   type="number"
                   value={qty}
@@ -164,13 +179,14 @@ export default function AddInventory() {
               </div>
 
               <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <div className="min-w-0 sm:min-w-[80px] lg:min-w-[100px]"></div>
-                    <button
-                      onClick={handleAdd}
-                      className="w-full bg-[#0616F9] text-white font-medium text-sm px-6 py-3 rounded-md hover:bg-blue-600">
-                      Add Item
-                    </button>
-                  </div>
+                <div className="min-w-0 sm:min-w-[80px] lg:min-w-[100px]"></div>
+                <button
+                  onClick={handleAdd}
+                  className="w-full bg-[#0616F9] text-white font-medium text-sm px-6 py-3 rounded-md hover:bg-blue-600"
+                >
+                  Add Item
+                </button>
+              </div>
             </div>
 
             {/* Preview Section */}
@@ -178,9 +194,21 @@ export default function AddInventory() {
               <div className="mt-4 p-4 bg-gray-50 rounded-md border-l-4 border-blue-500">
                 <h3 className="text-sm font-medium mb-2">Preview:</h3>
                 <div className="text-xs space-y-1">
-                  {itemName && <div><span className="font-medium">Item Name:</span> {itemName}</div>}
-                  {qty && <div><span className="font-medium">Quantity:</span> {qty}</div>}
-                  {type && <div><span className="font-medium">Type:</span> {type}</div>}
+                  {itemName && (
+                    <div>
+                      <span className="font-medium">Item Name:</span> {itemName}
+                    </div>
+                  )}
+                  {qty && (
+                    <div>
+                      <span className="font-medium">Quantity:</span> {qty}
+                    </div>
+                  )}
+                  {type && (
+                    <div>
+                      <span className="font-medium">Type:</span> {type}
+                    </div>
+                  )}
                 </div>
               </div>
             )}

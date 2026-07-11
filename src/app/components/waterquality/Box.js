@@ -13,11 +13,17 @@ function Box() {
   const [averageTDS, setAverageTDS] = useState(null);
   const [loadingTDS, setLoadingTDS] = useState(true);
   const [errorTDS, setErrorTDS] = useState(null);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
-  useEffect(() => {
+  /*   useEffect(() => {
     async function fetchAveragePH() {
       try {
-        const response = await fetch("http://localhost:5000/api/waterquality/average-ph");
+        const response = await fetch(
+          `${apiBaseUrl}/api/waterquality/average-ph`,
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -35,7 +41,9 @@ function Box() {
   useEffect(() => {
     async function fetchAverageTemp() {
       try {
-        const response = await fetch("http://localhost:5000/api/waterquality/average-temperature");
+        const response = await fetch(
+          `${apiBaseUrl}/api/waterquality/average-temperature`,
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -53,7 +61,9 @@ function Box() {
   useEffect(() => {
     async function fetchAverageTDS() {
       try {
-        const response = await fetch("http://localhost:5000/api/waterquality/average-tds");
+        const response = await fetch(
+          `${apiBaseUrl}/api/waterquality/average-tds`,
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -66,17 +76,21 @@ function Box() {
       }
     }
     fetchAverageTDS();
-  }, []);
+  }, []); */
 
   return (
-    <div className="p-2 grid grid-cols-1 -mt-16 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1  md:grid-cols-3 gap-6">
       {/* Average pH */}
       <div className="bg-white p-4 rounded-lg shadow-md flex flex-row items-center gap-4">
         <GiChemicalDrop className=" text-3xl" />
         <div>
           <div className="font-bold  text-gray-500">Average pH</div>
           <div className="text-2xl font-bold text-blue-900">
-            {loadingPH ? "Loading..." : errorPH ? `Error: ${errorPH}` : averagePH}
+            {loadingPH
+              ? "Loading..."
+              : errorPH
+                ? `Error: ${errorPH}`
+                : averagePH}
           </div>
           <div className="text-sm text-gray-500">Optimal Range : 6.0 - 7.8</div>
         </div>
@@ -87,9 +101,15 @@ function Box() {
         <div>
           <div className="font-bold text-gray-500">Average Salinity</div>
           <div className="text-2xl font-bold text-blue-900">
-            {loadingTDS ? "Loading..." : errorTDS ? `Error: ${errorTDS}` : `${averageTDS} ppm`}
+            {loadingTDS
+              ? "Loading..."
+              : errorTDS
+                ? `Error: ${errorTDS}`
+                : `${averageTDS} ppm`}
           </div>
-          <div className="text-sm text-gray-500">Optimal Range : 40.0 - 100.0 NTU</div>
+          <div className="text-sm text-gray-500">
+            Optimal Range : 40.0 - 100.0 NTU
+          </div>
         </div>
       </div>
       {/* Average Temp */}
@@ -98,9 +118,15 @@ function Box() {
         <div>
           <div className="font-bold text-gray-500">Average Temp.</div>
           <div className="text-2xl font-bold text-blue-900">
-            {loadingTemp ? "Loading..." : errorTemp ? `Error: ${errorTemp}` : `${averageTemp} °C`}
+            {loadingTemp
+              ? "Loading..."
+              : errorTemp
+                ? `Error: ${errorTemp}`
+                : `${averageTemp} °C`}
           </div>
-          <div className="text-sm text-gray-500">Optimal Range : 25.0 - 32.0 °C</div>
+          <div className="text-sm text-gray-500">
+            Optimal Range : 25.0 - 32.0 °C
+          </div>
         </div>
       </div>
     </div>

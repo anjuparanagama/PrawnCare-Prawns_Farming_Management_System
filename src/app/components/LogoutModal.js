@@ -7,10 +7,10 @@ export default function LogoutModal({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null;
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
-    router.push('/Login');
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    router.push("/Login");
   };
 
   return (
@@ -19,9 +19,7 @@ export default function LogoutModal({ isOpen, onClose, onConfirm }) {
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
           Confirm Logout
         </h3>
-        <p className="text-gray-600 mb-6">
-          Are you sure you want to logout?
-        </p>
+        <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}

@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Bottom from "./PurchaseBottom";
+import { Header as PageTitle } from "../Base/PageTitle";
 
 export default function PurchasingPage() {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -18,9 +19,14 @@ export default function PurchasingPage() {
     },
   ]);
 
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
+
   const formattedRange = `${format(range[0].startDate, "dd MMM yyyy")} - ${format(
     range[0].endDate,
-    "dd MMM yyyy"
+    "dd MMM yyyy",
   )}`;
 
   const [formData, setFormData] = useState({
@@ -51,7 +57,7 @@ export default function PurchasingPage() {
 
   const handleUpdate = async () => {
     try {
-      const res = await fetch("/api/purchase/purchase-item-add", {
+      const res = await fetch(`${apiBaseUrl}/api/purchase/purchase-item-add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -79,7 +85,9 @@ export default function PurchasingPage() {
     try {
       const startDate = format(range[0].startDate, "yyyy-MM-dd");
       const endDate = format(range[0].endDate, "yyyy-MM-dd");
-      const res = await fetch(`/api/purchase/downloadpdf?start=${startDate}&end=${endDate}`);
+      const res = await fetch(
+        `/api/purchase/downloadpdf?start=${startDate}&end=${endDate}`,
+      );
       if (!res.ok) throw new Error("Failed to download PDF");
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -96,10 +104,10 @@ export default function PurchasingPage() {
   };
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 lg:p-8 mx-auto w-full">
+    <div className="flex flex-col gap-4">
       {/* Header with buttons on the right */}
-      <div className="flex justify-between items-center mb-4 sm:mb-6 lg:mb-8">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1C00B8]">Purchasing</h1>
+      <div className="flex justify-between items-center mb-6">
+        <PageTitle title="Purchasing" />
         <div className="flex flex-row gap-2 sm:gap-3 lg:gap-4 items-center">
           <button
             onClick={() => setShowCalendar(!showCalendar)}
@@ -109,8 +117,9 @@ export default function PurchasingPage() {
             <span className="font-medium">{formattedRange}</span>
           </button>
           <button
-              onClick={handleDownload}
-              className="border border-gray-300 px-3 py-2 rounded-md text-xs sm:text-sm flex items-center gap-2 shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200">
+            onClick={handleDownload}
+            className="border border-gray-300 px-3 py-2 rounded-md text-xs sm:text-sm flex items-center gap-2 shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200"
+          >
             <FaDownload className="text-gray-600 text-xs sm:text-sm" />
             <span className="font-medium">Download PDF</span>
           </button>
@@ -129,8 +138,10 @@ export default function PurchasingPage() {
         </div>
       )}
 
-      <div className="bg-[#DDE6FF] rounded-lg p-3 sm:p-4 mb-3 sm:mb-4 lg:mb-6">
-        <h2 className="text-center text-[#0019FA] italic text-sm sm:text-base lg:text-lg font-medium">Purchased Items</h2>
+      <div className="bg-[#DDE6FF] rounded-lg p-3 ">
+        <h2 className="text-center text-[#0019FA] italic text-sm sm:text-base lg:text-lg font-medium">
+          Purchased Items
+        </h2>
       </div>
 
       <div className="bg-white rounded-md shadow-md p-3 sm:p-4 md:p-6">
@@ -138,7 +149,9 @@ export default function PurchasingPage() {
           {/* Left column */}
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="flex flex-col gap-1 sm:gap-2">
-              <label className="text-xs sm:text-sm font-medium text-gray-700">Item</label>
+              <label className="text-xs sm:text-sm font-medium text-gray-700">
+                Item
+              </label>
               <select
                 name="item_id"
                 value={formData.item_id}
@@ -154,7 +167,9 @@ export default function PurchasingPage() {
               </select>
             </div>
             <div className="flex flex-col gap-1 sm:gap-2">
-              <label className="text-xs sm:text-sm font-medium text-gray-700">Quantity</label>
+              <label className="text-xs sm:text-sm font-medium text-gray-700">
+                Quantity
+              </label>
               <input
                 type="number"
                 name="quantity"
@@ -169,7 +184,9 @@ export default function PurchasingPage() {
           {/* Right column */}
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="flex flex-col gap-1 sm:gap-2">
-              <label className="text-xs sm:text-sm font-medium text-gray-700">Supplier</label>
+              <label className="text-xs sm:text-sm font-medium text-gray-700">
+                Supplier
+              </label>
               <select
                 name="supplier_id"
                 value={formData.supplier_id}
@@ -178,14 +195,19 @@ export default function PurchasingPage() {
               >
                 <option value="">Select Supplier</option>
                 {suppliers.map((supplier) => (
-                  <option key={supplier.supplier_id} value={supplier.supplier_id}>
+                  <option
+                    key={supplier.supplier_id}
+                    value={supplier.supplier_id}
+                  >
                     {supplier.supplier_id} - {supplier.name}
                   </option>
                 ))}
               </select>
             </div>
             <div className="flex flex-col gap-1 sm:gap-2">
-              <label className="text-xs sm:text-sm font-medium text-gray-700">Price</label>
+              <label className="text-xs sm:text-sm font-medium text-gray-700">
+                Price
+              </label>
               <input
                 type="text"
                 name="price"

@@ -4,8 +4,18 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
 const monthNames = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export default function Graph() {
@@ -30,6 +40,11 @@ export default function Graph() {
     ],
   });
 
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
+
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
 
@@ -37,35 +52,41 @@ export default function Graph() {
     // Fetch total revenue
     const fetchTotalRevenue = async () => {
       try {
-        const response = await fetch("/api/sales/revenue");
+        const response = await fetch(`${apiBaseUrl}/api/sales/revenue`);
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         // Ensure we have a valid number, default to 0 if not
-        setTotalRevenue(typeof data.totalRevenue === 'number' ? data.totalRevenue :
-                      (data.totalRevenue !== null && data.totalRevenue !== undefined) ? parseFloat(data.totalRevenue) || 0 : 0);
+        setTotalRevenue(
+          typeof data.totalRevenue === "number"
+            ? data.totalRevenue
+            : data.totalRevenue !== null && data.totalRevenue !== undefined
+              ? parseFloat(data.totalRevenue) || 0
+              : 0,
+        );
       } catch (error) {
         console.error("Error fetching total revenue:", error);
         setTotalRevenue(0);
       }
     };
 
-   const fetchTotalSales = async () => {
-  try {
-    const response = await fetch("/api/sales/sales/count");
-    if (!response.ok) throw new Error("Network response was not ok");
-    const data = await response.json();
-    setTotalSales(typeof data.totalSales === 'number' ? data.totalSales : 0);
-  } catch (error) {
-    console.error("Error fetching total sales:", error);
-    setTotalSales(0);
-  }
-};
-
+    const fetchTotalSales = async () => {
+      try {
+        const response = await fetch(`${apiBaseUrl}/api/sales/sales/count`);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setTotalSales(
+          typeof data.totalSales === "number" ? data.totalSales : 0,
+        );
+      } catch (error) {
+        console.error("Error fetching total sales:", error);
+        setTotalSales(0);
+      }
+    };
 
     // Fetch monthly revenue and update chart data
     const fetchMonthlyRevenue = async () => {
       try {
-        const response = await fetch("/api/sales/revenue/monthly");
+        const response = await fetch(`${apiBaseUrl}/api/sales/revenue/monthly`);
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
 
@@ -98,7 +119,7 @@ export default function Graph() {
       await Promise.all([
         fetchTotalRevenue(),
         fetchTotalSales(),
-        fetchMonthlyRevenue()
+        fetchMonthlyRevenue(),
       ]);
       setIsLoading(false);
     };
@@ -111,7 +132,8 @@ export default function Graph() {
     const loadChartJS = () => {
       if (typeof window.Chart === "undefined") {
         const script = document.createElement("script");
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js";
+        script.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js";
         script.onload = () => createChart();
         document.head.appendChild(script);
       } else {
@@ -195,7 +217,11 @@ export default function Graph() {
     doc.text("Sales Report", 10, 10);
     doc.setFontSize(12);
     // Safe handling of potentially undefined values
-    doc.text(`Total Sales Revenue: Rs. ${(totalRevenue || 0).toLocaleString()}`, 10, 30);
+    doc.text(
+      `Total Sales Revenue: Rs. ${(totalRevenue || 0).toLocaleString()}`,
+      10,
+      30,
+    );
     doc.text(`Total Sales: ${totalSales || 0}`, 10, 40);
     const canvas = chartRef.current;
     if (canvas) {
@@ -210,10 +236,8 @@ export default function Graph() {
   const safeSales = totalSales || 0;
 
   return (
-    <div className="w-full mx-auto px-4">
-      {isLoading && (
-          <div className="text-gray-500">Loading...</div>
-      )}
+    <div>
+      {isLoading && <div className="text-gray-500">Loading...</div>}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Metric Cards */}
@@ -221,7 +245,9 @@ export default function Graph() {
           <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Total Sales Revenue</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Sales Revenue
+                </p>
                 <div className="flex items-center">
                   <span className="text-2xl font-bold text-blue-600">
                     Rs.{safeRevenue}
@@ -237,12 +263,26 @@ export default function Graph() {
           <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Total Sales</p>
-                <span className="text-2xl font-bold text-gray-900">{safeSales}</span>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Sales
+                </p>
+                <span className="text-2xl font-bold text-gray-900">
+                  {safeSales}
+                </span>
               </div>
               <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                <svg
+                  className="w-4 h-4 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  />
                 </svg>
               </div>
             </div>

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { FaChartLine, FaBox, FaExclamationTriangle } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -13,20 +13,29 @@ export default function DashboardCards() {
   const [prevNewOrders, setPrevNewOrders] = useState(0);
   const [prevLowStockItems, setPrevLowStockItems] = useState(0);
 
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       // Fetch revenue
-      const revenueResponse = await fetch('/api/dashboard/revenue');
+      const revenueResponse = await fetch(
+        `${apiBaseUrl}/api/dashboard/revenue`,
+      );
       const revenueData = await revenueResponse.json();
       const newTotalRevenue = revenueData.totalRevenue;
 
       // Fetch new orders
-      const ordersResponse = await fetch('/api/dashboard/orders');
+      const ordersResponse = await fetch(`${apiBaseUrl}/api/dashboard/orders`);
       const ordersData = await ordersResponse.json();
       const newNewOrders = ordersData.newOrders;
 
       // Fetch low stock items
-      const stockResponse = await fetch('/api/dashboard/low-stock');
+      const stockResponse = await fetch(
+        `${apiBaseUrl}/api/dashboard/low-stock`,
+      );
       const stockData = await stockResponse.json();
       const newLowStockItems = stockData.lowStockItems;
 
@@ -44,17 +53,18 @@ export default function DashboardCards() {
   }, []);
 
   // Calculate percentage changes
-  const revenueChange = prevTotalRevenue !== 0 
-    ? ((totalRevenue - prevTotalRevenue) / prevTotalRevenue) * 100 
-    : 0; // Avoid division by zero
+  const revenueChange =
+    prevTotalRevenue !== 0
+      ? ((totalRevenue - prevTotalRevenue) / prevTotalRevenue) * 100
+      : 0; // Avoid division by zero
 
-  const ordersChange = prevNewOrders !== 0 
-    ? ((newOrders - prevNewOrders) / prevNewOrders) * 100 
-    : 0; // Avoid division by zero
+  const ordersChange =
+    prevNewOrders !== 0
+      ? ((newOrders - prevNewOrders) / prevNewOrders) * 100
+      : 0; // Avoid division by zero
 
-  const stockChange = prevLowStockItems !== 0 
-    ? lowStockItems - prevLowStockItems 
-    : 0; // Simple difference for stock change
+  const stockChange =
+    prevLowStockItems !== 0 ? lowStockItems - prevLowStockItems : 0; // Simple difference for stock change
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -86,7 +96,7 @@ export default function DashboardCards() {
           <h4 className="text-gray-500">Low Stock Items</h4>
           <FaExclamationTriangle className="text-xl text-red-500" />
         </div>
-        <div className="flex items-center justify-between"> 
+        <div className="flex items-center justify-between">
           <p className="text-xl font-bold">{lowStockItems}</p>
         </div>
       </div>

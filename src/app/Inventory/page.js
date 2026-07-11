@@ -1,20 +1,23 @@
+"use client";
+
 import Navbar from "../components/Navbar";
 import Upper from "../components/Inventory/Upper";
 import MiddleOne from "../components/Inventory/MiddleOne";
 import Bottom from "../components/Inventory/Bottom";
+import { Header } from "../components/Base/PageTitle";
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen">
-      {/* Sidebar on the left */}
-      <Navbar />
+  const download = () => {
+    window.open(`${apiBaseUrl}/api/inventory/downloadpdf`, "_blank");
+    alert("Download successfully");
+  };
 
-      {/* Main content area on the right (stacked vertically) */}
-      <div className="flex-grow flex flex-col p-4 py-0 gap-6 ml-[250px] ">
-        <Upper />
-        <MiddleOne />
-        <Bottom/>
-      </div>
+  return (
+    <div className="flex min-h-screen flex-col p-8 gap-8">
+      <Header title="Inventory" Download={download} />
+      <Upper />
+      <MiddleOne />
+      <Bottom />
     </div>
   );
 }

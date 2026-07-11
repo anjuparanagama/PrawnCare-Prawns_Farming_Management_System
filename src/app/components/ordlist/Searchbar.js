@@ -37,7 +37,7 @@ export default function Searchbar({ onFilter }) {
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full ">
       <div className="flex items-center space-x-4 mb-6">
         <div className="relative flex-1">
           <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">

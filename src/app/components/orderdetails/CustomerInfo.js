@@ -4,12 +4,18 @@ import { useState, useEffect } from "react";
 export default function CustomerInfo({ orderId }) {
   const [customerData, setCustomerData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   useEffect(() => {
     if (orderId) {
       const fetchCustomerData = async () => {
         try {
-          const response = await fetch(`/api/orders/order/${orderId}/customer`);
+          const response = await fetch(
+            `${apiBaseUrl}/api/orders/order/${orderId}/customer`,
+          );
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -22,7 +28,7 @@ export default function CustomerInfo({ orderId }) {
             name: "John Smith",
             address: "No.537/ United States",
             phone: "+1 (555) 123 456",
-            email: "Johnfarm@gmail.com"
+            email: "Johnfarm@gmail.com",
           });
         } finally {
           setLoading(false);
@@ -45,4 +51,3 @@ export default function CustomerInfo({ orderId }) {
     </div>
   );
 }
-  

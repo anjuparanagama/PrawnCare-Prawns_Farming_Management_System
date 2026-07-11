@@ -4,12 +4,26 @@ import React, { useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 
 const monthNames = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export default function Graph() {
   const [view, setView] = useState("Monthly");
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -34,13 +48,13 @@ export default function Graph() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let url = '';
+      let url = "";
       if (view === "Monthly") {
-        url = '/api/orders/orders/monthly';
+        url = `${apiBaseUrl}/api/orders/orders/monthly`;
       } else if (view === "Weekly") {
-        url = '/api/orders/orders/weekly';
+        url = `${apiBaseUrl}/api/orders/orders/weekly`;
       } else if (view === "Daily") {
-        url = '/api/orders/orders/daily';
+        url = `${apiBaseUrl}/api/orders/orders/daily`;
       }
 
       try {
@@ -52,10 +66,10 @@ export default function Graph() {
           // Process monthly data only
           const currentYearData = Array(12).fill(0);
           const prevYearData = Array(12).fill(0);
-          
-          data.forEach(item => {
+
+          data.forEach((item) => {
             if (item.month) {
-              const monthIndex = parseInt(item.month.split('-')[1]) - 1;
+              const monthIndex = parseInt(item.month.split("-")[1]) - 1;
               if (item.year === new Date().getFullYear()) {
                 currentYearData[monthIndex] = item.total_quantity || 0;
               } else if (item.year === new Date().getFullYear() - 1) {
@@ -88,23 +102,31 @@ export default function Graph() {
         } else if (view === "Weekly") {
           // Process weekly data only
           const currentYear = new Date().getFullYear();
-          const currentYearWeeks = data.filter(item => item.year === currentYear);
-          const prevYearWeeks = data.filter(item => item.year === currentYear - 1);
-          
+          const currentYearWeeks = data.filter(
+            (item) => item.year === currentYear,
+          );
+          const prevYearWeeks = data.filter(
+            (item) => item.year === currentYear - 1,
+          );
+
           // Get all unique weeks for current year and sort them
-          const allWeeks = [...new Set(data.map(item => item.week))].sort((a, b) => a - b);
-          
-          const currentYearData = allWeeks.map(week => {
-            const weekData = currentYearWeeks.find(item => item.week === week);
-            return weekData ? weekData.total_quantity : 0;
-          });
-          
-          const prevYearData = allWeeks.map(week => {
-            const weekData = prevYearWeeks.find(item => item.week === week);
+          const allWeeks = [...new Set(data.map((item) => item.week))].sort(
+            (a, b) => a - b,
+          );
+
+          const currentYearData = allWeeks.map((week) => {
+            const weekData = currentYearWeeks.find(
+              (item) => item.week === week,
+            );
             return weekData ? weekData.total_quantity : 0;
           });
 
-          const labels = allWeeks.map(week => `Week ${week}`);
+          const prevYearData = allWeeks.map((week) => {
+            const weekData = prevYearWeeks.find((item) => item.week === week);
+            return weekData ? weekData.total_quantity : 0;
+          });
+
+          const labels = allWeeks.map((week) => `Week ${week}`);
 
           setChartData({
             labels,
@@ -130,19 +152,23 @@ export default function Graph() {
         } else if (view === "Daily") {
           // Process daily data only
           const currentYear = new Date().getFullYear();
-          const currentYearDays = data.filter(item => item.year === currentYear);
-          const prevYearDays = data.filter(item => item.year === currentYear - 1);
-          
+          const currentYearDays = data.filter(
+            (item) => item.year === currentYear,
+          );
+          const prevYearDays = data.filter(
+            (item) => item.year === currentYear - 1,
+          );
+
           // Get all unique days and sort them
-          const allDays = [...new Set(data.map(item => item.day))].sort();
-          
-          const currentYearData = allDays.map(day => {
-            const dayData = currentYearDays.find(item => item.day === day);
+          const allDays = [...new Set(data.map((item) => item.day))].sort();
+
+          const currentYearData = allDays.map((day) => {
+            const dayData = currentYearDays.find((item) => item.day === day);
             return dayData ? dayData.total_quantity : 0;
           });
-          
-          const prevYearData = allDays.map(day => {
-            const dayData = prevYearDays.find(item => item.day === day);
+
+          const prevYearData = allDays.map((day) => {
+            const dayData = prevYearDays.find((item) => item.day === day);
             return dayData ? dayData.total_quantity : 0;
           });
 
@@ -187,26 +213,26 @@ export default function Graph() {
         maintainAspectRatio: false,
         responsive: true,
         plugins: {
-          legend: { 
-            labels: { color: "black" }, 
-            align: "end", 
-            position: "bottom" 
+          legend: {
+            labels: { color: "black" },
+            align: "end",
+            position: "bottom",
           },
-          tooltip: { 
-            mode: "index", 
-            intersect: false 
+          tooltip: {
+            mode: "index",
+            intersect: false,
           },
         },
         scales: {
-          x: { 
-            ticks: { color: "rgba(0,0,0,0.7)" }, 
-            grid: { display: false } 
+          x: {
+            ticks: { color: "rgba(0,0,0,0.7)" },
+            grid: { display: false },
           },
-          y: { 
-            ticks: { color: "rgba(0,0,0,0.7)" }, 
+          y: {
+            ticks: { color: "rgba(0,0,0,0.7)" },
             grid: { display: false },
             beginAtZero: true,
-            suggestedMax: 200
+            suggestedMax: 200,
           },
         },
       },
@@ -218,7 +244,7 @@ export default function Graph() {
   }, [chartData]);
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-6">
+    <div>
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="p-4">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-4 sm:space-y-0 sm:space-x-4">

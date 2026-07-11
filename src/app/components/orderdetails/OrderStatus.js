@@ -8,12 +8,18 @@ export default function OrderStatus({ orderId }) {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState(null);
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
 
   useEffect(() => {
     if (orderId) {
       const fetchOrderStatus = async () => {
         try {
-          const response = await fetch(`/api/orders/order/${orderId}/status`);
+          const response = await fetch(
+            `${apiBaseUrl}/api/orders/order/${orderId}/status`,
+          );
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -51,13 +57,16 @@ export default function OrderStatus({ orderId }) {
     setActionLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/orders/order/${orderId}/approve_reject`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `/api/orders/order/${orderId}/approve_reject`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ action }),
         },
-        body: JSON.stringify({ action }),
-      });
+      );
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to update order status");
@@ -75,28 +84,31 @@ export default function OrderStatus({ orderId }) {
   return (
     <div className="bg-white  border-gray-200 rounded-xl p-8">
       <h3 className="font-semibold mb-2">Order Status</h3>
-      <p className="mb-4">Current Status: <strong>{orderStatus}</strong></p>
-      {(orderStatus === "New" || orderStatus === "Processing") && !approvedOrRejected && (
-        <div className="flex items-center space-x-4">
-          <select
-            value={selectedAction}
-            onChange={(e) => setSelectedAction(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2"
-            disabled={actionLoading}
-          >
-            <option value="">Select Action</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-          </select>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 transition"
-            onClick={() => selectedAction && handleAction(selectedAction)}
-            disabled={actionLoading || !selectedAction}
-          >
-            Submit
-          </button>
-        </div>
-      )}
+      <p className="mb-4">
+        Current Status: <strong>{orderStatus}</strong>
+      </p>
+      {(orderStatus === "New" || orderStatus === "Processing") &&
+        !approvedOrRejected && (
+          <div className="flex items-center space-x-4">
+            <select
+              value={selectedAction}
+              onChange={(e) => setSelectedAction(e.target.value)}
+              className="border border-gray-300 rounded px-3 py-2"
+              disabled={actionLoading}
+            >
+              <option value="">Select Action</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 transition"
+              onClick={() => selectedAction && handleAction(selectedAction)}
+              disabled={actionLoading || !selectedAction}
+            >
+              Submit
+            </button>
+          </div>
+        )}
       {approvedOrRejected && (
         <p className="mt-4 font-semibold">
           Order has been {approvedOrRejected}.
