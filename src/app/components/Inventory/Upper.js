@@ -142,28 +142,10 @@ export default function InventoryPage() {
       .catch((err) => console.log("Error fetching items:", err));
   }, []);
 
-  const download = () => {
-    window.open(`${apiBaseUrl}/api/inventory/downloadpdf`, "_blank");
-    alert("Download successfully");
-  };
-
   return (
-    <div className="bg-white">
+    <div>
       {/* Main content */}
-      <div className="w-full p-3 sm:p-4 md:p-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4">
-          <h1 className="text-2xl font-bold text-[#1C00B8]">Inventory</h1>
-          <button
-            onClick={download}
-            className="flex items-center gap-1 px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm hover:bg-gray-100 transition-colors"
-          >
-            <p>Download Inventory report : </p>
-            <span>⬇</span>
-            <span>Export</span>
-          </button>
-        </div>
-
+      <div>
         {/*Issue Items Header */}
         <div className="bg-[#DDE6FF] rounded-md p-3 mb-4">
           <h2 className="text-center text-blue-900 italic text-sm font-medium sm:text-base">

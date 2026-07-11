@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FaRegCalendarAlt, FaDownload } from "react-icons/fa";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
+import { Header as PageTitle } from "../Base/PageTitle";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
@@ -75,11 +76,9 @@ function Header() {
   };
 
   return (
-    <div className="p-3 sm:p-4 mx-auto w-full">
+    <div>
       <div className="flex justify-between items-center sm:mb-6 lg:mb-2">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1C00B8]">
-          Sales
-        </h1>
+        <PageTitle title="Sales" />
         <div className="flex flex-row gap-2 sm:gap-3 lg:gap-2 items-center">
           <button
             onClick={() => setShowCalendar(!showCalendar)}
