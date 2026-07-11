@@ -47,7 +47,7 @@ export const PurchaseBottom = () => {
   }, []);
 
   return (
-    <div className="bg-blue-100 rounded shadow overflow-x-auto mt-6">
+    <div>
       <table className="w-full text-sm min-w-[600px]">
         <thead>
           <tr className="bg-blue-200 text-left">

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Check, X, Edit, Trash2 } from "lucide-react";
+import { Header as PageTitle } from "../Base/PageTitle";
 
 const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
   /\/$/,
@@ -250,13 +251,11 @@ export default function User() {
   };
 
   return (
-    <div className="bg-white h-screen flex flex-row text-blue-700 overflow-hidden">
+    <div className=" h-screen flex flex-row text-blue-700 overflow-hidden">
       {/* Main Content */}
-      <div className="flex-1 flex flex-col pt-7 px-8 pb-4 min-h-0">
-        <div className="text-2xl font-bold mb-4 py-0 text-[#1C00B8]">
-          User Management
-        </div>
-        <div className="flex-1 flex flex-col space-y-6 min-h-0">
+      <div className="flex-1 flex flex-col pt-7 px-6  min-h-0">
+        <PageTitle title="User Management" />
+        <div className="flex-1 flex flex-col space-y-6 min-h-0 mt-6">
           {/* Second Table - Add User Form */}
           <div className="flex-shrink-0">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">

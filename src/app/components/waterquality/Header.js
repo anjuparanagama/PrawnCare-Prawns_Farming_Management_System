@@ -7,6 +7,7 @@ import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { Header as PageTitle } from "../Base/PageTitle";
 
 function Header() {
   const [startDate, setStartDate] = useState("2025-10-08");
@@ -57,12 +58,10 @@ function Header() {
   };
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 lg:p-8 mx-auto w-full bg-white">
+    <div>
       {/* Header with buttons on the right */}
-      <div className="flex justify-between items-center mb-4 sm:mb-6 lg:mb-8">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1C00B8]">
-          Water Quality
-        </h1>
+      <div className="flex justify-between items-center ">
+        <PageTitle title="Water Quality" />
         <div className="flex flex-row gap-2 sm:gap-3 lg:gap-4 items-center">
           <button
             onClick={() => setShowCalendar(!showCalendar)}

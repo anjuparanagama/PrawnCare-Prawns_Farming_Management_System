@@ -78,7 +78,7 @@ function Table() {
   }
 
   return (
-    <div className="pl-6 bg-white rounded-lg shadow-md">
+    <div className="bg-white rounded-lg shadow-md">
       <table className="w-full text-left">
         <thead className="">
           <tr>

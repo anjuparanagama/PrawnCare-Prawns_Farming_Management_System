@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Bottom from "./PurchaseBottom";
+import { Header as PageTitle } from "../Base/PageTitle";
 
 export default function PurchasingPage() {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -103,12 +104,10 @@ export default function PurchasingPage() {
   };
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 lg:p-8 mx-auto w-full">
+    <div className="flex flex-col gap-4">
       {/* Header with buttons on the right */}
-      <div className="flex justify-between items-center mb-4 sm:mb-6 lg:mb-8">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1C00B8]">
-          Purchasing
-        </h1>
+      <div className="flex justify-between items-center mb-6">
+        <PageTitle title="Purchasing" />
         <div className="flex flex-row gap-2 sm:gap-3 lg:gap-4 items-center">
           <button
             onClick={() => setShowCalendar(!showCalendar)}
@@ -139,7 +138,7 @@ export default function PurchasingPage() {
         </div>
       )}
 
-      <div className="bg-[#DDE6FF] rounded-lg p-3 sm:p-4 mb-3 sm:mb-4 lg:mb-6">
+      <div className="bg-[#DDE6FF] rounded-lg p-3 ">
         <h2 className="text-center text-[#0019FA] italic text-sm sm:text-base lg:text-lg font-medium">
           Purchased Items
         </h2>
