@@ -18,11 +18,13 @@ export default function AppShell({ children }) {
         children
       ) : (
         <div className="min-h-screen bg-white lg:flex">
-          <div className="hidden lg:block lg:w-64 lg:shrink-0">
-            <Navbar />
-          </div>
+          <Navbar />
 
-          <main className="min-h-screen flex-1">{children}</main>
+          <div className="hidden lg:block lg:w-64 lg:shrink-0" />
+
+          <main className="min-h-screen flex-1 pt-16 lg:pt-0 pb-20 lg:pb-0">
+            {children}
+          </main>
         </div>
       )}
     </>
