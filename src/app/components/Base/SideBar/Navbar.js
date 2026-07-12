@@ -139,16 +139,10 @@ export default function Navbar() {
             href="/Dashboard"
             className="flex items-center gap-3 no-underline"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-300 to-teal-600 text-[#052E3E] shadow-lg shadow-cyan-900/30">
-              <FaTint className="text-lg" />
-            </div>
             <div>
-              <h1 className="text-base font-semibold leading-none text-white">
+              <h1 className="text-xl font-semibold leading-none text-white">
                 Prawn<span className="text-cyan-300">Care</span>
               </h1>
-              <span className="mt-1 block text-[10px] font-semibold uppercase tracking-wider text-cyan-400/70">
-                Aquaculture
-              </span>
             </div>
           </Link>
 
@@ -164,111 +158,116 @@ export default function Navbar() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[#03212d]/80 backdrop-blur-sm lg:hidden">
-          <button
-            type="button"
-            className="absolute inset-0"
-            onClick={() => setMobileMenuOpen(false)}
-            aria-label="Close menu overlay"
-          />
-
-          <div className="absolute inset-x-3 top-3 overflow-hidden rounded-3xl border border-white/10 bg-[#052E3E] shadow-2xl shadow-black/40">
-            <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-300 to-teal-600 text-[#052E3E] shadow-lg shadow-cyan-900/30">
-                  <FaTint className="text-lg" />
-                </div>
-                <div>
-                  <h2 className="text-base font-semibold text-white">
-                    Prawn<span className="text-cyan-300">Care</span>
-                  </h2>
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-400/70">
-                    Menu
-                  </p>
-                </div>
+        <div className="fixed inset-0 z-50 bg-[#052E3E] lg:hidden flex flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-white/10 px-6 py-5 bg-[#052E3E]">
+            <Link
+              href="/Dashboard"
+              className="flex items-center gap-3 no-underline"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-300 to-teal-600 text-[#052E3E] shadow-lg shadow-cyan-900/30">
+                <FaTint className="text-lg" />
               </div>
+              <div>
+                <h2 className="text-lg font-semibold text-white leading-none">
+                  Prawn<span className="text-cyan-300">Care</span>
+                </h2>
+              </div>
+            </Link>
 
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-colors hover:bg-white/10"
-                aria-label="Close menu"
-              >
-                <FaTimes className="text-lg" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-colors hover:bg-white/10"
+              aria-label="Close menu"
+            >
+              <FaTimes className="text-lg" />
+            </button>
+          </div>
 
-            <div className="max-h-[calc(100vh-5.5rem)] overflow-y-auto px-4 py-4">
-              <MobileSection title="Main menu">
-                <MobileNavItem
-                  icon={<FaTachometerAlt />}
-                  label="Dashboard"
-                  href="/Dashboard"
-                  active={pathname === "/Dashboard" || pathname === "/"}
-                />
-                <MobileNavItem
-                  icon={<FaShoppingCart />}
-                  label="Orders"
-                  href="/Orderlist"
-                  active={
-                    pathname.startsWith("/Orderlist") ||
-                    pathname.startsWith("/Orders")
-                  }
-                />
-                <MobileNavItem
-                  icon={<FaBoxes />}
-                  label="Inventory"
-                  href="/Inventory"
-                  active={pathname.startsWith("/Inventory")}
-                />
-              </MobileSection>
+          {/* Menu Content */}
+          <div className="flex-1 overflow-y-auto px-6 py-6">
+            <MobileSection title="Main menu">
+              <MobileNavItem
+                icon={<FaTachometerAlt />}
+                label="Dashboard"
+                href="/Dashboard"
+                active={pathname === "/Dashboard" || pathname === "/"}
+                onClose={() => setMobileMenuOpen(false)}
+              />
+              <MobileNavItem
+                icon={<FaShoppingCart />}
+                label="Orders"
+                href="/Orderlist"
+                active={
+                  pathname.startsWith("/Orderlist") ||
+                  pathname.startsWith("/Orders")
+                }
+                onClose={() => setMobileMenuOpen(false)}
+              />
+              <MobileNavItem
+                icon={<FaBoxes />}
+                label="Inventory"
+                href="/Inventory"
+                active={pathname.startsWith("/Inventory")}
+                onClose={() => setMobileMenuOpen(false)}
+              />
+            </MobileSection>
 
-              <MobileSection title="Reports">
-                <MobileNavItem
-                  icon={<FaFileAlt />}
-                  label="Sales"
-                  href="/Sale"
-                  active={pathname.startsWith("/Sale")}
-                />
-                <MobileNavItem
-                  icon={<FaFileAlt />}
-                  label="Purchasing"
-                  href="/Report"
-                  active={
-                    pathname.startsWith("/Report") ||
-                    pathname.startsWith("/report")
-                  }
-                />
-                <MobileNavItem
-                  icon={<FaFileAlt />}
-                  label="Water Quality"
-                  href="/waterquality"
-                  active={pathname.startsWith("/waterquality")}
-                />
-              </MobileSection>
+            <MobileSection title="Reports">
+              <MobileNavItem
+                icon={<FaFileAlt />}
+                label="Sales"
+                href="/Sale"
+                active={pathname.startsWith("/Sale")}
+                onClose={() => setMobileMenuOpen(false)}
+              />
+              <MobileNavItem
+                icon={<FaFileAlt />}
+                label="Purchasing"
+                href="/Report"
+                active={
+                  pathname.startsWith("/Report") ||
+                  pathname.startsWith("/report")
+                }
+                onClose={() => setMobileMenuOpen(false)}
+              />
+              <MobileNavItem
+                icon={<FaFileAlt />}
+                label="Water Quality"
+                href="/waterquality"
+                active={pathname.startsWith("/waterquality")}
+                onClose={() => setMobileMenuOpen(false)}
+              />
+            </MobileSection>
 
-              <MobileSection title="System">
-                <MobileNavItem
-                  icon={<FaCog />}
-                  label="Settings"
-                  href="/Settings"
-                  active={pathname.startsWith("/Settings")}
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setShowLogoutModal(true);
-                  }}
-                  className="flex w-full items-center gap-3 rounded-2xl border border-rose-400/20 px-4 py-3 text-left text-sm font-medium text-slate-200 transition-all duration-200 hover:bg-rose-400/10 hover:text-rose-200"
-                >
-                  <span className="text-rose-300">
-                    <FaSignOutAlt />
-                  </span>
-                  <span>Log out</span>
-                </button>
-              </MobileSection>
-            </div>
+            <MobileSection title="System">
+              <MobileNavItem
+                icon={<FaCog />}
+                label="Settings"
+                href="/Settings"
+                active={pathname.startsWith("/Settings")}
+                onClose={() => setMobileMenuOpen(false)}
+              />
+            </MobileSection>
+          </div>
+
+          {/* Logout Button at Bottom */}
+          <div className="border-t border-white/10 px-6 py-5 bg-[#052E3E]">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setShowLogoutModal(true);
+              }}
+              className="flex w-full items-center justify-center gap-3 rounded-xl border border-rose-400/20 px-6 py-3 text-sm font-medium text-slate-200 transition-all duration-200 hover:bg-rose-400/10 hover:text-rose-200"
+            >
+              <span className="text-rose-300">
+                <FaSignOutAlt />
+              </span>
+              <span>Log out</span>
+            </button>
           </div>
         </div>
       )}
@@ -376,7 +375,7 @@ function MobileSection({ title, children }) {
   );
 }
 
-function MobileNavItem({ icon, label, active = false, href }) {
+function MobileNavItem({ icon, label, active = false, href, onClose }) {
   const content = (
     <div
       className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
@@ -395,7 +394,7 @@ function MobileNavItem({ icon, label, active = false, href }) {
   );
 
   return (
-    <Link href={href} className="no-underline">
+    <Link href={href} className="no-underline" onClick={onClose}>
       {content}
     </Link>
   );

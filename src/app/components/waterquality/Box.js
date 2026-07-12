@@ -81,50 +81,52 @@ function Box() {
   return (
     <div className="grid grid-cols-1  md:grid-cols-3 gap-6">
       {/* Average pH */}
-      <div className="bg-white p-4 rounded-lg shadow-md flex flex-row items-center gap-4">
+      <div className="bg-white p-4 rounded-lg shadow-md flex flex-row items-center gap-4 border-b-4 border-blue-500">
         <GiChemicalDrop className=" text-3xl" />
         <div>
           <div className="font-bold  text-gray-500">Average pH</div>
-          <div className="text-2xl font-bold text-blue-900">
+          <div className="text-2xl font-bold text-blue-500">
             {loadingPH
               ? "Loading..."
               : errorPH
                 ? `Error: ${errorPH}`
                 : averagePH}
           </div>
-          <div className="text-sm text-gray-500">Optimal Range : 6.0 - 7.8</div>
+          <div className="text-xs font-bold text-orange-600">
+            Optimal Range : 6.0 - 7.8
+          </div>
         </div>
       </div>
       {/* Average Salinity */}
-      <div className="bg-white p-4 rounded-lg shadow-md flex flex-row items-center gap-4">
+      <div className="bg-white p-4 rounded-lg shadow-md flex flex-row items-center gap-4 border-b-4 border-cyan-500">
         <GiEnergyTank className=" text-3xl" />
         <div>
           <div className="font-bold text-gray-500">Average Salinity</div>
-          <div className="text-2xl font-bold text-blue-900">
+          <div className="text-2xl font-bold text-cyan-500">
             {loadingTDS
               ? "Loading..."
               : errorTDS
                 ? `Error: ${errorTDS}`
                 : `${averageTDS} ppm`}
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-xs font-bold text-orange-600">
             Optimal Range : 40.0 - 100.0 NTU
           </div>
         </div>
       </div>
       {/* Average Temp */}
-      <div className="bg-white p-4 rounded-lg shadow-md flex flex-row items-center gap-4">
+      <div className="bg-white p-4 rounded-lg shadow-md flex flex-row items-center gap-4 border-b-4 border-indigo-500">
         <WiThermometer className=" text-3xl" />
         <div>
           <div className="font-bold text-gray-500">Average Temp.</div>
-          <div className="text-2xl font-bold text-blue-900">
+          <div className="text-2xl font-bold text-indigo-500">
             {loadingTemp
               ? "Loading..."
               : errorTemp
                 ? `Error: ${errorTemp}`
                 : `${averageTemp} °C`}
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-xs font-bold text-orange-600">
             Optimal Range : 25.0 - 32.0 °C
           </div>
         </div>

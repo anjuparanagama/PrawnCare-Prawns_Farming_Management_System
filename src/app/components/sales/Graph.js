@@ -18,6 +18,13 @@ const monthNames = [
   "December",
 ];
 
+function formatNumber(value) {
+  return Number(value || 0).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 export default function Graph() {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
@@ -250,7 +257,7 @@ export default function Graph() {
                 </p>
                 <div className="flex items-center">
                   <span className="text-2xl font-bold text-blue-600">
-                    Rs.{safeRevenue}
+                    Rs.{formatNumber(safeRevenue)}
                   </span>
                 </div>
               </div>

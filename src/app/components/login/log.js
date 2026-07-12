@@ -82,9 +82,9 @@ export default function Login() {
       {/* Login Form */}
       <div className="form-container relative z-10 w-full md:w-1/2 px-6 py-8 md:p-12 md:pl-20 flex flex-col justify-center">
         <div className="w-full max-w-sm mx-auto md:mx-0">
-          <div className="flex items-center gap-3 mb-10">
+          <div className="flex items-center gap-3 mb-3">
             <span className="text-lg font-semibold text-white">
-              Prawn<span className="text-cyan-300">Care</span>
+              Prawn<span className="text-cyan-300">Care</span>™
             </span>
           </div>
 

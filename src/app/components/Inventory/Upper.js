@@ -210,7 +210,7 @@ export default function InventoryPage() {
   };
   return (
     <div className="min-h-screen ">
-      <div className="max-w-[26rem] grid grid-cols-1 gap-4">
+      <div className=" w-full sm:max-w-[26rem] grid grid-cols-1 gap-4">
         {/* ================= ISSUE ITEMS ================= */}
         <div className="rounded-2xl bg-white shadow border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-5">

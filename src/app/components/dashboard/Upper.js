@@ -3,6 +3,13 @@
 import { FaChartLine, FaBox, FaExclamationTriangle } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
+function formatNumber(value) {
+  return Number(value || 0).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 export default function DashboardCards() {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [newOrders, setNewOrders] = useState(0);
@@ -75,7 +82,7 @@ export default function DashboardCards() {
           <FaChartLine className="text-xl text-blue-500" />
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-xl font-bold">{totalRevenue}</p>
+          <p className="text-xl font-bold">{formatNumber(totalRevenue)}</p>
         </div>
       </div>
 

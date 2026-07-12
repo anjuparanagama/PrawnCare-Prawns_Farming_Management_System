@@ -358,7 +358,7 @@ export default function User() {
   return (
     <div className=" h-screen flex flex-row text-blue-700 overflow-hidden">
       {/* Main Content */}
-      <div className="flex-1 flex flex-col pt-7 px-6  min-h-0">
+      <div className="flex-1 flex flex-col pt-7 px-6 min-h-0">
         <PageTitle title="User Management" />
         <div className="flex-1 flex flex-col space-y-6 min-h-0 mt-6">
           {/* Second Table - Add User Form */}
@@ -370,7 +370,7 @@ export default function User() {
                 </h2>
               </div>
               <div className="p-6 mt-2">
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <label className="text-sm font-medium text-gray-700 w-24">
@@ -509,14 +509,6 @@ export default function User() {
               mobileTitle="User Status History"
               emptyMessage="No users found"
             />
-            <div className="px-6 py-3 text-center">
-              <button
-                onClick={handleSeeAll}
-                className="text-blue-600 font-medium hover:text-blue-800 transition-colors"
-              >
-                See All
-              </button>
-            </div>
           </div>
         </div>
       </div>
