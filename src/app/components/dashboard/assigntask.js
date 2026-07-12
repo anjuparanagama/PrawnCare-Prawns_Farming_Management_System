@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default function Assigntask() {
   const [id, setItemID] = useState("");
@@ -26,7 +27,7 @@ export default function Assigntask() {
       });
 
       const data = await res.json();
-      alert(data.message || "Task assigned successfully!");
+      toast.success(data.message || "Task assigned successfully!");
 
       setItemID("");
       setTitle("");
@@ -34,9 +35,11 @@ export default function Assigntask() {
     } catch (error) {
       console.error("Error:", error);
       if (error.message.includes("Server returned")) {
-        alert("Server error. Please check if the backend is running.");
+        toast.error("Server error. Please check if the backend is running.");
       } else {
-        alert("Network error. Please check your connection and try again.");
+        toast.error(
+          "Network error. Please check your connection and try again.",
+        );
       }
     }
   };

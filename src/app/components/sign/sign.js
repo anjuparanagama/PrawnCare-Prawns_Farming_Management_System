@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function Sign() {
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function Sign() {
 
     // Validate password match
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -43,15 +44,15 @@ export default function Sign() {
       });
 
       if (response.data.success) {
-        alert("Registration successful!");
+        toast.success("Registration successful");
         window.location.href = "/Login";
       }
     } catch (error) {
       console.error("Registration error:", error);
       if (error.response?.data?.message) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       } else {
-        alert("Registration failed. Please try again.");
+        toast.error("Registration failed. Please try again.");
       }
     }
   };

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AddInventory() {
   const [itemName, setItemName] = useState("");
@@ -13,17 +14,17 @@ export default function AddInventory() {
   const handleAdd = async (e) => {
     e.preventDefault();
     if (!itemName.trim()) {
-      alert("Please enter an item name");
+      toast.error("Please enter an item name");
       return;
     }
 
     if (!qty || parseInt(qty) < 0) {
-      alert("Please enter a valid quantity");
+      toast.error("Please enter a valid quantity");
       return;
     }
 
     if (!type) {
-      alert("Please select a type");
+      toast.error("Please select a type");
       return;
     }
 
@@ -43,19 +44,21 @@ export default function AddInventory() {
       const data = await res.json();
 
       if (data.success) {
-        alert(data.message || "Item added successfully");
+        toast.success(data.message || "Item added successfully");
         setItemName("");
         setType("");
         setQty("");
       } else {
-        alert(data.message || "Error adding item. Please try again.");
+        toast.error(data.message || "Error adding item. Please try again.");
       }
     } catch (error) {
       console.error("Error:", error);
       if (error.message.includes("Server returned")) {
-        alert("Server error. Please check if the backend is running.");
+        toast.error("Server error. Please check if the backend is running.");
       } else {
-        alert("Network error. Please check your connection and try again.");
+        toast.error(
+          "Network error. Please check your connection and try again.",
+        );
       }
     }
   };

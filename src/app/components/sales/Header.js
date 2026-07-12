@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { Header as PageTitle } from "../Base/PageTitle";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import toast from "react-hot-toast";
 
 function Header() {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -71,7 +72,7 @@ function Header() {
         url,
       ); /*Deletes the temporary file link to free memory.*/
     } catch (error) {
-      alert("Error downloading PDF: " + error.message); /**/
+      toast.error("Error downloading PDF: " + error.message); /**/
     }
   };
 

@@ -4,11 +4,12 @@ import Upper from "../components/Inventory/Upper";
 import MiddleOne from "../components/Inventory/MiddleOne";
 import Bottom from "../components/Inventory/Bottom";
 import { Header } from "../components/Base/PageTitle";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const download = () => {
     window.open(`${apiBaseUrl}/api/inventory/downloadpdf`, "_blank");
-    alert("Download successfully");
+    toast.success("Download successfully");
   };
 
   return (

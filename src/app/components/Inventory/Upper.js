@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { Package, RefreshCcw, PlusCircle, CalendarDays } from "lucide-react";
 
 export default function InventoryPage() {
@@ -56,12 +57,12 @@ export default function InventoryPage() {
     e.preventDefault();
 
     if (!idIssue) {
-      alert("Please select an item.");
+      toast.error("Please select an item.");
       return;
     }
 
     if (!qtyIssue || isNaN(qtyIssue) || Number(qtyIssue) <= 0) {
-      alert("Please enter valid quantity.");
+      toast.error("Please enter valid quantity.");
       return;
     }
 
@@ -80,17 +81,17 @@ export default function InventoryPage() {
       const data = await res.json();
 
       if (data.success) {
-        alert(data.message);
+        toast.success(data.message);
 
         setIdIssue("");
         setQtyIssue("");
         setDateIssue(new Date().toISOString().split("T")[0]);
       } else {
-        alert(data.message);
+        toast.error(data.message);
       }
     } catch (err) {
       console.log(err);
-      alert("Network Error");
+      toast.error("Network Error");
     }
   };
 
@@ -102,12 +103,12 @@ export default function InventoryPage() {
     e.preventDefault();
 
     if (!id) {
-      alert("Please select an item.");
+      toast.error("Please select an item.");
       return;
     }
 
     if (!qty || isNaN(qty) || Number(qty) <= 0) {
-      alert("Please enter valid quantity.");
+      toast.error("Please enter valid quantity.");
       return;
     }
 
@@ -126,17 +127,17 @@ export default function InventoryPage() {
       const data = await res.json();
 
       if (data.success) {
-        alert(data.message);
+        toast.success(data.message);
 
         setItemID("");
         setQty("");
         setDate(new Date().toISOString().split("T")[0]);
       } else {
-        alert(data.message);
+        toast.error(data.message);
       }
     } catch (err) {
       console.log(err);
-      alert("Network Error");
+      toast.error("Network Error");
     }
   };
 
@@ -148,17 +149,17 @@ export default function InventoryPage() {
     e.preventDefault();
 
     if (!newItem.trim()) {
-      alert("Please enter an item name");
+      toast.error("Please enter an item name");
       return;
     }
 
     if (!initialQty || Number(initialQty) < 0) {
-      alert("Please enter a valid quantity");
+      toast.error("Please enter a valid quantity");
       return;
     }
 
     if (!newItemType) {
-      alert("Please select a type");
+      toast.error("Please select a type");
       return;
     }
 
@@ -184,7 +185,7 @@ export default function InventoryPage() {
       const data = await res.json();
 
       if (data.success) {
-        alert(data.message || "Item added successfully");
+        toast.success(data.message || "Item added successfully");
 
         setNewItem("");
         setInitialQty("");
@@ -199,12 +200,12 @@ export default function InventoryPage() {
             }
           });
       } else {
-        alert(data.message || "Failed to add item");
+        toast.error(data.message || "Failed to add item");
       }
     } catch (error) {
       console.error(error);
 
-      alert("Network error. Please check if backend is running.");
+      toast.error("Network error. Please check if backend is running.");
     }
   };
   return (

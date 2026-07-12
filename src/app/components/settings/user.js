@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Check, X, Edit, Trash2 } from "lucide-react";
 import { Header as PageTitle } from "../Base/PageTitle";
+import toast from "react-hot-toast";
 
 const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
   /\/$/,
@@ -92,21 +93,25 @@ export default function User() {
       !formData.mobileNo ||
       !formData.password
     ) {
+      toast.error("All fields are required");
       setError("All fields are required");
       return;
     }
 
     if (!formData.email.includes("@")) {
+      toast.error("Email must contain @");
       setError("Email must contain @");
       return;
     }
 
     if (formData.password.length <= 6) {
+      toast.error("Password must be longer than 6 characters");
       setError("Password must be longer than 6 characters");
       return;
     }
 
     if (!/^\d{10}$/.test(formData.mobileNo)) {
+      toast.error("Mobile number must be exactly 10 digits.");
       setError("Mobile number must be exactly 10 digits.");
       return;
     }
@@ -132,6 +137,7 @@ export default function User() {
       const data = await response.json();
 
       if (response.ok) {
+        toast.success("Worker registered successfully!");
         setSuccess("Worker registered successfully!");
         setTimeout(() => {
           window.location.reload();
@@ -151,9 +157,12 @@ export default function User() {
         });
         setPasswordVisible(false);
       } else {
-        setError(data.message || "Failed to register worker");
+        const message = data.message || "Failed to register worker";
+        toast.error(message);
+        setError(message);
       }
     } catch (err) {
+      toast.error("Network error. Please try again.");
       setError("Network error. Please try again.");
     } finally {
       setLoading(false);
@@ -183,7 +192,7 @@ export default function User() {
       !editFormData.email ||
       !editFormData.mobileNo
     ) {
-      alert("All fields are required");
+      toast.error("All fields are required");
       return;
     }
 
@@ -217,10 +226,10 @@ export default function User() {
         setEditingUserId(null);
         setEditFormData({ userName: "", email: "", mobileNo: "" });
       } else {
-        alert("Failed to update user");
+        toast.error("Failed to update user");
       }
     } catch (err) {
-      alert("Network error. Please try again.");
+      toast.error("Network error. Please try again.");
     }
   };
 
@@ -241,12 +250,12 @@ export default function User() {
         setStatusHistory((prev) =>
           prev.filter((user) => user.userId !== userId),
         );
-        alert("User deleted successfully");
+        toast.success("User deleted successfully");
       } else {
-        alert("Failed to delete user");
+        toast.error("Failed to delete user");
       }
     } catch (err) {
-      alert("Network error. Please try again.");
+      toast.error("Network error. Please try again.");
     }
   };
 

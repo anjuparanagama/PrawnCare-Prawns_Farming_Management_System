@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { Header as PageTitle } from "../Base/PageTitle";
+import toast from "react-hot-toast";
 
 function Header() {
   const [startDate, setStartDate] = useState("2025-10-08");
@@ -53,7 +54,7 @@ function Header() {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      alert("Error downloading PDF: " + error.message);
+      toast.error("Error downloading PDF: " + error.message);
     }
   };
 

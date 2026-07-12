@@ -8,6 +8,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Bottom from "./PurchaseBottom";
 import { Header as PageTitle } from "../Base/PageTitle";
+import toast from "react-hot-toast";
 
 export default function PurchasingPage() {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -65,7 +66,7 @@ export default function PurchasingPage() {
 
       const data = await res.json();
       if (res.ok) {
-        alert(data.message || "Purchase item added successfully!");
+        toast.success(data.message || "Purchase item added successfully!");
         setFormData({
           item_id: "",
           supplier_id: "",
@@ -73,11 +74,11 @@ export default function PurchasingPage() {
           quantity: "",
         });
       } else {
-        alert(data.error || "Error adding purchase item");
+        toast.error(data.error || "Error adding purchase item");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Network error. Please check your connection and try again.");
+      toast.error("Network error. Please check your connection and try again.");
     }
   };
 
@@ -99,7 +100,7 @@ export default function PurchasingPage() {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      alert("Error downloading PDF: " + error.message);
+      toast.error("Error downloading PDF: " + error.message);
     }
   };
 

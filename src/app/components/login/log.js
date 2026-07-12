@@ -4,6 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [userName, setuserName] = useState("");
@@ -40,12 +41,16 @@ export default function Login() {
 
       sessionStorage.setItem("user", JSON.stringify(response.data.user));
 
-      router.push("/Dashboard");
+      toast.success("Login successfully");
+
+      setTimeout(() => {
+        router.push("/Dashboard");
+      }, 1200);
     } catch (error) {
       console.log("Login Error:", error.response?.data);
 
-      alert(
-        "Login Failed: " + (error.response?.data?.message || "Server Error"),
+      toast.error(
+        `Login failed: ${error.response?.data?.message || "Server error"}`,
       );
     } finally {
       setLoading(false);
