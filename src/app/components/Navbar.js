@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,10 +11,10 @@ import {
   FaSignOutAlt,
   FaChevronDown,
   FaChevronUp,
+  FaTint,
+  FaUserCircle,
 } from "react-icons/fa";
 import LogoutModal from "./LogoutModal";
-import Logo from "../../../public/images/logo.png";
-import Image from "next/image";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -23,82 +22,103 @@ export default function Navbar() {
 
   return (
     <>
-      <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col justify-between border-r border-slate-200 bg-white/90 backdrop-blur-xl shadow-2xl">
-        {/* Logo */}
-        <div>
-          <div className="border-b border-slate-100 px-7 py-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-14 w-14 items-center justify-center">
-                <Image
-                  src="/images/logo.png"
-                  alt="Logo"
-                  width={48}
-                  height={48}
-                />
-              </div>
+      <div className="w-64 h-screen bg-[#052E3E] border-r border-white/5 flex flex-col justify-between fixed z-30 overflow-hidden">
+        {/* ambient wave texture in the background */}
+        <svg
+          className="pointer-events-none absolute inset-x-0 top-0 h-40 w-full opacity-[0.08]"
+          viewBox="0 0 300 160"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0 90 C 40 60, 80 120, 120 90 S 200 60, 240 90 S 300 60, 300 90 V0 H0 Z"
+            fill="#5FE8D9"
+          />
+        </svg>
 
-              <div>
-                <h1 className="text-2xl font-bold font-sans text-blue-700">
-                  PrawnCare
-                </h1>
-              </div>
+        <div className="relative z-10 flex flex-col">
+          {/* Logo / Branding */}
+          <div className="p-6 pb-5 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-300 to-teal-600 flex items-center justify-center text-[#052E3E] shadow-lg shadow-cyan-900/30">
+              <FaTint className="text-lg" />
+            </div>
+            <div>
+              <h1 className="text-xl font-semibold text-white leading-none">
+                Prawn<span className="text-cyan-300">Care</span>
+              </h1>
+              <span className="text-[10px] font-semibold text-cyan-400/70 tracking-wider uppercase mt-1 block">
+                Aquaculture
+              </span>
             </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="space-y-2 px-5 py-6">
-            <SidebarItem
-              icon={<FaTachometerAlt />}
-              label="Dashboard"
-              href="/Dashboard"
-              active={pathname === "/Dashboard"}
-            />
+          {/* Navigation Section */}
+          <div className="px-4 py-2 mt-3">
+            <span className="text-[11px] font-bold text-slate-500 tracking-wider uppercase px-4 block mb-2">
+              Main menu
+            </span>
 
-            <SidebarItem
-              icon={<FaShoppingCart />}
-              label="Orders"
-              href="/Orderlist"
-              active={pathname === "/Orderlist"}
-            />
+            <nav className="flex flex-col gap-1">
+              <SidebarItem
+                icon={<FaTachometerAlt />}
+                label="Dashboard"
+                href="/Dashboard"
+                active={pathname === "/Dashboard" || pathname === "/"}
+              />
+              <SidebarItem
+                icon={<FaShoppingCart />}
+                label="Orders"
+                href="/Orderlist"
+                active={
+                  pathname.startsWith("/Orderlist") ||
+                  pathname.startsWith("/Orders")
+                }
+              />
+              <SidebarDropdown
+                icon={<FaFileAlt />}
+                label="Reports"
+                items={["Sales", "Purchasing", "Water Quality"]}
+                active={
+                  pathname.startsWith("/Sale") ||
+                  pathname.startsWith("/report") ||
+                  pathname.startsWith("/Report") ||
+                  pathname.startsWith("/waterquality")
+                }
+              />
+              <SidebarItem
+                icon={<FaBoxes />}
+                label="Inventory"
+                href="/Inventory"
+                active={pathname.startsWith("/Inventory")}
+              />
+            </nav>
 
-            <SidebarDropdown
-              icon={<FaFileAlt />}
-              label="Reports"
-              items={["Sales", "Purchasing", "Water Quality"]}
-              active={
-                pathname.startsWith("/Sale") ||
-                pathname.startsWith("/Report") ||
-                pathname.startsWith("/waterquality")
-              }
-            />
-
-            <SidebarItem
-              icon={<FaBoxes />}
-              label="Inventory"
-              href="/Inventory"
-              active={pathname === "/Inventory"}
-            />
-
-            <SidebarItem
-              icon={<FaCog />}
-              label="Settings"
-              href="/Settings"
-              active={pathname === "/Settings"}
-            />
-          </nav>
+            <span className="text-[11px] font-bold text-slate-500 tracking-wider uppercase px-4 block mt-6 mb-2">
+              System
+            </span>
+            <nav className="flex flex-col gap-1">
+              <SidebarItem
+                icon={<FaCog />}
+                label="Settings"
+                href="/Settings"
+                active={pathname.startsWith("/Settings")}
+              />
+            </nav>
+          </div>
         </div>
 
-        {/* Logout */}
-        <div className="border-t border-slate-100 p-5">
+        {/* User Profile & Logout Area */}
+        <div className="relative z-10 p-4 border-t border-white/10">
           <button
             onClick={() => setShowLogoutModal(true)}
-            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-red-200 py-3 font-medium text-red-500 transition-all duration-300 hover:bg-red-50 hover:shadow-md"
+            className="w-full flex items-center justify-between text-slate-300 hover:text-rose-300 px-4 py-2.5 rounded-xl border border-rose-400/20 hover:bg-rose-400/10 transition-all duration-200 group text-sm font-medium"
           >
-            <FaSignOutAlt />
-            Log Out
+            <div className="flex items-center gap-3">
+              <FaSignOutAlt className="text-rose-400/70 group-hover:text-rose-300 transition-colors" />
+              <span>Log out</span>
+            </div>
           </button>
         </div>
-      </aside>
+      </div>
 
       <LogoutModal
         isOpen={showLogoutModal}
@@ -110,39 +130,40 @@ export default function Navbar() {
 }
 
 function SidebarItem({ icon, label, active = false, href }) {
-  return (
-    <Link href={href}>
-      <div
-        className={`group relative flex items-center gap-4 rounded-2xl px-5 py-3 transition-all duration-300
-
-        ${
+  const content = (
+    <div
+      className={`flex items-center gap-3 px-4 py-2.5 rounded-xl cursor-pointer transition-all duration-200 relative group ${
+        active
+          ? "bg-gradient-to-r from-cyan-400 to-teal-600 text-[#052E3E] font-medium shadow-md shadow-cyan-900/30"
+          : "text-slate-300 hover:text-white hover:bg-white/5"
+      }`}
+    >
+      <span
+        className={`text-[15px] transition-colors ${
           active
-            ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg"
-            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            ? "text-[#052E3E]"
+            : "text-cyan-300/70 group-hover:text-cyan-200"
         }`}
       >
-        {active && (
-          <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-white"></div>
-        )}
-
-        <div
-          className={`text-lg ${
-            active ? "text-white" : "text-slate-500 group-hover:text-cyan-600"
-          }`}
-        >
-          {icon}
-        </div>
-
-        <span className="font-medium">{label}</span>
-      </div>
-    </Link>
+        {icon}
+      </span>
+      <span className="text-sm">{label}</span>
+    </div>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className="no-underline">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }
 
 function SidebarDropdown({ icon, label, items, active = false }) {
   const [open, setOpen] = useState(active);
-
-  const pathname = usePathname();
 
   const routeMap = {
     Sales: "/Sale",
@@ -151,61 +172,48 @@ function SidebarDropdown({ icon, label, items, active = false }) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col">
       <div
         onClick={() => setOpen(!open)}
-        className={`group flex cursor-pointer items-center justify-between rounded-2xl px-5 py-3 transition-all duration-300
-
-        ${
+        className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition-all duration-200 relative group ${
           active || open
-            ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg"
-            : "text-slate-600 hover:bg-slate-100"
+            ? "bg-white/5 text-white font-medium"
+            : "text-slate-300 hover:text-white hover:bg-white/5"
         }`}
       >
-        <div className="flex items-center gap-4">
-          <div
-            className={`text-lg ${
+        <div className="flex items-center gap-3">
+          <span
+            className={`text-[15px] transition-colors ${
               active || open
-                ? "text-white"
-                : "text-slate-500 group-hover:text-cyan-600"
+                ? "text-cyan-300"
+                : "text-cyan-300/70 group-hover:text-cyan-200"
             }`}
           >
             {icon}
-          </div>
-
-          <span className="font-medium">{label}</span>
+          </span>
+          <span className="text-sm">{label}</span>
         </div>
-
-        {open ? <FaChevronUp /> : <FaChevronDown />}
+        <span className="text-slate-400 text-xs transition-transform duration-200">
+          {open ? <FaChevronUp /> : <FaChevronDown />}
+        </span>
       </div>
 
-      <div
-        className={`overflow-hidden transition-all duration-300 ${
-          open ? "max-h-60 mt-2" : "max-h-0"
-        }`}
-      >
-        <div className="ml-7 flex flex-col gap-2 border-l border-slate-200 pl-5">
+      {open && (
+        <div className="ml-6 pl-4 mt-1 mb-2 flex flex-col gap-0.5 border-l border-white/10">
           {items.map((item) => {
-            const href = routeMap[item];
-
+            const itemHref = routeMap[item] || "#";
             return (
               <Link
                 key={item}
-                href={href}
-                className={`rounded-xl px-3 py-2 text-sm transition-all
-
-                ${
-                  pathname === href
-                    ? "bg-cyan-100 font-medium text-cyan-700"
-                    : "text-slate-500 hover:bg-cyan-50 hover:text-cyan-600"
-                }`}
+                href={itemHref}
+                className="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-400 hover:text-cyan-200 hover:bg-white/5 transition-all duration-150 block"
               >
                 {item}
               </Link>
             );
           })}
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function Sign() {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     serviceId: "",
     email: "",

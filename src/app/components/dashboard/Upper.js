@@ -69,7 +69,7 @@ export default function DashboardCards() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
       {/* Total Revenue */}
-      <div className="p-6 bg-white rounded-xl shadow">
+      <div className="p-6 bg-white rounded-xl shadow border-l-blue-500 border-l-4">
         <div className="flex items-center justify-between mb-1">
           <h4 className="text-gray-500">Total Revenue</h4>
           <FaChartLine className="text-xl text-blue-500" />
@@ -80,7 +80,7 @@ export default function DashboardCards() {
       </div>
 
       {/* New Orders */}
-      <div className="p-6 bg-white rounded-xl shadow">
+      <div className="p-6 bg-white rounded-xl shadow  border-l-4 border-l-green-500 ">
         <div className="flex items-center justify-between mb-1">
           <h4 className="text-gray-500">New Orders</h4>
           <FaBox className="text-xl text-green-500" />
@@ -91,7 +91,7 @@ export default function DashboardCards() {
       </div>
 
       {/* Low Stock Items */}
-      <div className="p-6 bg-white rounded-xl shadow">
+      <div className="p-6 bg-white rounded-xl shadow border-l-red-500  border-l-4">
         <div className="flex items-center justify-between mb-1">
           <h4 className="text-gray-500">Low Stock Items</h4>
           <FaExclamationTriangle className="text-xl text-red-500" />
