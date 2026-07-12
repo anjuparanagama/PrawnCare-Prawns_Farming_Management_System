@@ -1,5 +1,5 @@
 import PurchaseUpper from "../components/purchase/PurchaseUpper";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Base/SideBar/Navbar";
 
 export default function Home() {
   return (

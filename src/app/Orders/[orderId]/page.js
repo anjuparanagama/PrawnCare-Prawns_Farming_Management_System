@@ -1,4 +1,4 @@
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Base/SideBar/Navbar";
 import OrderDetailsHeader from "../../components/orderdetails/OrderDetailsHeader";
 import OrderItem from "../../components/orderdetails/OrderItem";
 import CustomerInfo from "../../components/orderdetails/CustomerInfo";

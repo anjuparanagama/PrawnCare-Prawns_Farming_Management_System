@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Base/SideBar/Navbar";
 import Upper from "../components/dashboard/Upper";
 import Bottom from "../components/dashboard/Bottom";
 import Assigntask from "../components/dashboard/assigntask";

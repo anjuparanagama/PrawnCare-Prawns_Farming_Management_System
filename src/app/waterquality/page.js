@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Base/SideBar/Navbar";
 import Header from "../components/waterquality/Header";
 import Box from "../components/waterquality/Box";
 import Table from "../components/waterquality/Table";

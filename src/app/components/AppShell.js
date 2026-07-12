@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Navbar from "./Navbar";
-import ToastProvider from "./ToastProvider";
+import Navbar from "./Base/SideBar/Navbar";
+import ToastProvider from "./Base/Notify/ToastProvider";
 
 const AUTH_ROUTES = new Set(["/", "/Login", "/Signup"]);
 

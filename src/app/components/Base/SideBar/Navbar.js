@@ -16,7 +16,7 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
-import LogoutModal from "./LogoutModal";
+import LogoutModal from "../LogOut/LogoutModal";
 
 export default function Navbar() {
   const pathname = usePathname();

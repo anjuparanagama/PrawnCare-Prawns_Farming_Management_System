@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Check, X, Edit, Trash2 } from "lucide-react";
 import { Header as PageTitle } from "../Base/PageTitle";
+import ResponsiveTable from "../Base/Table";
 import toast from "react-hot-toast";
 
 const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
@@ -39,6 +40,101 @@ export default function User() {
     email: "",
     mobileNo: "",
   });
+
+  const columns = [
+    { key: "userId", label: "User ID" },
+    {
+      key: "userName",
+      label: "User Name",
+      render: (user) =>
+        editingUserId === user.userId ? (
+          <input
+            type="text"
+            name="userName"
+            value={editFormData.userName}
+            onChange={handleEditInputChange}
+            className="w-full px-2 py-1 border border-gray-300 rounded-md"
+          />
+        ) : (
+          user.userName
+        ),
+    },
+    {
+      key: "email",
+      label: "E-Mail",
+      render: (user) =>
+        editingUserId === user.userId ? (
+          <input
+            type="email"
+            name="email"
+            value={editFormData.email}
+            onChange={handleEditInputChange}
+            className="w-full px-2 py-1 border border-gray-300 rounded-md"
+          />
+        ) : (
+          <span className="text-blue-600">{user.email}</span>
+        ),
+    },
+    {
+      key: "mobileNo",
+      label: "Mobile No",
+      render: (user) =>
+        editingUserId === user.userId ? (
+          <input
+            type="tel"
+            name="mobileNo"
+            value={editFormData.mobileNo}
+            onChange={handleEditInputChange}
+            className="w-full px-2 py-1 border border-gray-300 rounded-md"
+          />
+        ) : (
+          user.mobileNo
+        ),
+    },
+    {
+      key: "actions",
+      label: "Actions",
+      render: (user) => (
+        <div className="flex items-center space-x-2">
+          {editingUserId === user.userId ? (
+            <>
+              <button
+                onClick={handleSave}
+                className="text-green-600 hover:text-green-800"
+                title="Save"
+              >
+                <Check />
+              </button>
+              <button
+                onClick={handleCancel}
+                className="text-red-600 hover:text-red-800"
+                title="Cancel"
+              >
+                <X />
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => handleEdit(user)}
+                className="text-blue-600 hover:text-blue-800"
+                title="Edit"
+              >
+                <Edit />
+              </button>
+              <button
+                onClick={() => handleDelete(user.userId)}
+                className="text-red-600 hover:text-red-800"
+                title="Delete"
+              >
+                <Trash2 />
+              </button>
+            </>
+          )}
+        </div>
+      ),
+    },
+  ];
 
   // Function to fetch registered workers
   const fetchWorkers = async () => {
@@ -405,129 +501,21 @@ export default function User() {
 
           {/* Third Table - User Status History */}
           <div className="flex-shrink-0">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-              {/* Header */}
-              <div className="bg-blue-100 border-b border-gray-200">
-                <div className="grid grid-cols-5 gap-4 px-6 py-3 text-sm font-medium text-gray-700">
-                  <div>User ID</div>
-                  <div>User Name</div>
-                  <div>E-Mail</div>
-                  <div>Mobile No</div>
-                  <div>Actions</div>
-                </div>
-              </div>
-
-              {/* Table Body */}
-              <div className="divide-y divide-gray-200">
-                {tableLoading ? (
-                  <div className="px-6 py-8 text-center text-gray-500">
-                    Loading users...
-                  </div>
-                ) : tableError ? (
-                  <div className="px-6 py-8 text-center text-red-500">
-                    {tableError}
-                  </div>
-                ) : statusHistory.length === 0 ? (
-                  <div className="px-6 py-8 text-center text-gray-500">
-                    No users found
-                  </div>
-                ) : (
-                  statusHistory.map((user, index) => (
-                    <div
-                      key={user.userId || index}
-                      className="grid grid-cols-5 gap-4 px-6 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="font-medium">{user.userId}</div>
-                      <div>
-                        {editingUserId === user.userId ? (
-                          <input
-                            type="text"
-                            name="userName"
-                            value={editFormData.userName}
-                            onChange={handleEditInputChange}
-                            className="w-full px-2 py-1 border border-gray-300 rounded-md"
-                          />
-                        ) : (
-                          user.userName
-                        )}
-                      </div>
-                      <div>
-                        {editingUserId === user.userId ? (
-                          <input
-                            type="email"
-                            name="email"
-                            value={editFormData.email}
-                            onChange={handleEditInputChange}
-                            className="w-full px-2 py-1 border border-gray-300 rounded-md"
-                          />
-                        ) : (
-                          <span className="text-blue-600">{user.email}</span>
-                        )}
-                      </div>
-                      <div>
-                        {editingUserId === user.userId ? (
-                          <input
-                            type="tel"
-                            name="mobileNo"
-                            value={editFormData.mobileNo}
-                            onChange={handleEditInputChange}
-                            className="w-full px-2 py-1 border border-gray-300 rounded-md"
-                          />
-                        ) : (
-                          user.mobileNo
-                        )}
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {editingUserId === user.userId ? (
-                          <>
-                            <button
-                              onClick={handleSave}
-                              className="text-green-600 hover:text-green-800"
-                              title="Save"
-                            >
-                              <Check />
-                            </button>
-                            <button
-                              onClick={handleCancel}
-                              className="text-red-600 hover:text-red-800"
-                              title="Cancel"
-                            >
-                              <X />
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              onClick={() => handleEdit(user)}
-                              className="text-blue-600 hover:text-blue-800"
-                              title="Edit"
-                            >
-                              <Edit />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(user.userId)}
-                              className="text-red-600 hover:text-red-800"
-                              title="Delete"
-                            >
-                              <Trash2 />
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* See All Button */}
-              <div className="border-t border-gray-200 px-6 py-3 text-center">
-                <button
-                  onClick={handleSeeAll}
-                  className="text-blue-600 font-medium hover:text-blue-800 transition-colors"
-                >
-                  See All
-                </button>
-              </div>
+            <ResponsiveTable
+              columns={columns}
+              data={statusHistory}
+              loading={tableLoading}
+              error={tableError}
+              mobileTitle="User Status History"
+              emptyMessage="No users found"
+            />
+            <div className="px-6 py-3 text-center">
+              <button
+                onClick={handleSeeAll}
+                className="text-blue-600 font-medium hover:text-blue-800 transition-colors"
+              >
+                See All
+              </button>
             </div>
           </div>
         </div>

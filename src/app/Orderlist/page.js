@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Base/SideBar/Navbar";
 import { Header } from "../components/Base/PageTitle";
 import Ordertable from "../components/ordlist/Ordertable";
 import Graph from "../components/ordlist/Graph";
