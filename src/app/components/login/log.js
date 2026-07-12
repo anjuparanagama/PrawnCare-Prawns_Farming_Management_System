@@ -12,6 +12,7 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
   const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
     /\/$/,
     "",
@@ -52,8 +53,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex w-full h-screen bg-[#052E3E] relative overflow-hidden">
-      {/* ambient wave texture across the whole page */}
+    <div className="flex min-h-screen w-full bg-[#052E3E] relative overflow-hidden flex-col md:flex-row">
       <svg
         className="pointer-events-none absolute inset-x-0 top-0 h-64 w-full opacity-[0.06]"
         viewBox="0 0 300 160"
@@ -65,17 +65,18 @@ export default function Login() {
         />
       </svg>
 
-      <div className="illustration-container relative z-10 min-h-screen w-1/2 hidden md:flex items-center justify-center">
+      {/* Illustration */}
+      <div className="illustration-container relative z-10 w-full md:w-1/2 h-[35vh] md:h-screen flex items-center justify-center">
         <img
           src="/images/login.png"
           alt="Abstract illustration of a person holding a key, standing in front of a door shaped like a shield, with a gradient purple and blue background"
-          className="w-[100%] h-[90%] pl-14 object-contain mix-blend-screen opacity-90"
+          className="w-[80%] md:w-[100%] h-full md:h-[90%] md:pl-14 object-contain mix-blend-screen opacity-90"
         />
       </div>
 
-      <div className="form-container relative z-10 w-full md:w-1/2 p-8 md:p-12 md:pl-20 flex flex-col justify-center">
+      {/* Login Form */}
+      <div className="form-container relative z-10 w-full md:w-1/2 px-6 py-8 md:p-12 md:pl-20 flex flex-col justify-center">
         <div className="w-full max-w-sm mx-auto md:mx-0">
-          {/* logo */}
           <div className="flex items-center gap-3 mb-10">
             <span className="text-lg font-semibold text-white">
               Prawn<span className="text-cyan-300">Care</span>
@@ -85,6 +86,7 @@ export default function Login() {
           <h1 className="text-3xl font-semibold text-white mb-2">
             Welcome back
           </h1>
+
           <p className="text-slate-400 mb-8 text-sm">
             Sign in to your account to continue
           </p>
@@ -97,6 +99,7 @@ export default function Login() {
               >
                 User name
               </label>
+
               <input
                 type="text"
                 id="text"
@@ -115,6 +118,7 @@ export default function Login() {
               >
                 Password
               </label>
+
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -125,6 +129,7 @@ export default function Login() {
                   className="w-full px-4 py-2.5 pr-10 bg-white/5 border border-white/10 rounded-xl text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/60 transition"
                   required
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -145,6 +150,7 @@ export default function Login() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       />
+
                       <circle
                         cx="12"
                         cy="12"
@@ -168,6 +174,7 @@ export default function Login() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       />
+
                       <circle
                         cx="12"
                         cy="12"
@@ -175,6 +182,7 @@ export default function Login() {
                         stroke="currentColor"
                         strokeWidth="2"
                       />
+
                       <path
                         d="M2 2L22 22"
                         stroke="currentColor"
@@ -196,6 +204,7 @@ export default function Login() {
                   onChange={(e) => setRememberMe(e.target.checked)}
                   className="h-4 w-4 rounded border-white/20 bg-white/5 text-cyan-500 focus:ring-cyan-400/60 focus:ring-offset-0"
                 />
+
                 <label
                   htmlFor="remember"
                   className="ml-2 block text-sm text-slate-400"
@@ -204,7 +213,6 @@ export default function Login() {
                 </label>
               </div>
             </div>
-
             <button
               type="button"
               onClick={handleLogin}
@@ -231,6 +239,7 @@ export default function Login() {
                       stroke="currentColor"
                       strokeWidth="4"
                     />
+
                     <path
                       className="opacity-75"
                       fill="currentColor"

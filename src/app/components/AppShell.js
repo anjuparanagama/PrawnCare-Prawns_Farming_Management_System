@@ -14,7 +14,7 @@ export default function AppShell({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:flex">
+    <div className="min-h-screen bg-white lg:flex">
       <div className="hidden lg:block lg:w-64 lg:shrink-0">
         <Navbar />
       </div>

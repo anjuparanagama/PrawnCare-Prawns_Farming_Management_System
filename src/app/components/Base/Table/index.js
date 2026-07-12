@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function ResponsiveTable({
   columns = [],
@@ -12,29 +12,36 @@ export default function ResponsiveTable({
   onRowClick = null,
   rowClickable = false,
 
-  // see all button
-  showSeeAll = true,
+  // see all
+  showSeeAll = false,
   onSeeAll = null,
   seeAllText = "See All",
 
-  // custom empty message
+  // pagination
+  pageSize = 10,
+  showPaginationButtons = true,
+
+  // threshold warning
+  thresholdColumn = null,
+  thresholdValue = null,
+
+  // empty
   emptyMessage = "No data available",
 
-  // status badge
-  statusColumn = null,
-
-  // mobile title
+  // mobile
   mobileTitle = "Data",
 }) {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const formatDate = (dateString) => {
     if (!dateString) return "";
 
     const date = new Date(dateString);
 
-    return `${date.getFullYear()} - ${String(date.getMonth() + 1).padStart(
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
       2,
       "0",
-    )} - ${String(date.getDate()).padStart(2, "0")}`;
+    )}-${String(date.getDate()).padStart(2, "0")}`;
   };
 
   const statusStyle = (status) => {
@@ -60,7 +67,26 @@ export default function ResponsiveTable({
   };
 
   const renderValue = (row, column) => {
+    // custom render
+    if (column.render) {
+      return column.render(row);
+    }
+
     const value = row[column.key];
+
+    // threshold warning
+    if (
+      column.key === thresholdColumn &&
+      thresholdValue !== null &&
+      Number(value) < Number(thresholdValue)
+    ) {
+      return (
+        <>
+          {value}
+          <span className="ml-2">⚠️</span>
+        </>
+      );
+    }
 
     if (column.type === "date") {
       return formatDate(value);
@@ -74,10 +100,11 @@ export default function ResponsiveTable({
       return (
         <span
           className={`
-        inline-block px-2 py-1 rounded-full 
-        text-xs font-semibold
-        ${statusStyle(value)}
-        `}
+          inline-block px-2 py-1 
+          rounded-full 
+          text-xs font-semibold
+          ${statusStyle(value)}
+          `}
         >
           {value}
         </span>
@@ -86,6 +113,22 @@ export default function ResponsiveTable({
 
     return value;
   };
+
+  const totalPages = Math.max(1, Math.ceil(data.length / pageSize));
+
+  const shouldPaginate = data.length > pageSize;
+
+  const startIndex = (currentPage - 1) * pageSize;
+
+  const visibleData = shouldPaginate
+    ? data.slice(startIndex, startIndex + pageSize)
+    : data;
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   if (loading) {
     return <div className="p-5 text-center">Loading...</div>;
@@ -97,8 +140,7 @@ export default function ResponsiveTable({
 
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-      {/* Desktop Table */}
-
+      {/* Desktop */}
       <div className="hidden sm:block overflow-x-auto">
         <table className="min-w-full table-auto">
           <thead className="bg-blue-100 text-black">
@@ -107,11 +149,11 @@ export default function ResponsiveTable({
                 <th
                   key={column.key}
                   className={`
-px-3 lg:px-6 py-3 
-text-xs font-medium uppercase
-tracking-wider
-${column.align === "right" ? "text-right" : "text-left"}
-`}
+                  px-3 lg:px-6 py-3
+                  text-xs font-medium uppercase
+                  tracking-wider
+                  ${column.align === "right" ? "text-right" : "text-left"}
+                  `}
                 >
                   {column.label}
                 </th>
@@ -120,14 +162,14 @@ ${column.align === "right" ? "text-right" : "text-left"}
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            {data.length === 0 ? (
+            {visibleData.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className="text-center py-5">
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
-              data.map((row, index) => (
+              visibleData.map((row, index) => (
                 <tr
                   key={index}
                   onClick={() => {
@@ -136,23 +178,22 @@ ${column.align === "right" ? "text-right" : "text-left"}
                     }
                   }}
                   className={`
-${index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                  ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}
 
-${rowClickable ? "cursor-pointer hover:bg-gray-100" : ""}
+                  ${rowClickable ? "cursor-pointer hover:bg-gray-100" : ""}
 
-transition-colors
-`}
+                  transition-colors
+                  `}
                 >
                   {columns.map((column) => (
                     <td
                       key={column.key}
                       className={`
-px-3 lg:px-6 py-4 text-sm
+                      px-3 lg:px-6 py-4
+                      text-sm text-gray-700
 
-${column.align === "right" ? "text-right" : "text-left"}
-
-text-gray-700
-`}
+                      ${column.align === "right" ? "text-right" : "text-left"}
+                      `}
                     >
                       {renderValue(row, column)}
                     </td>
@@ -164,7 +205,7 @@ text-gray-700
         </table>
       </div>
 
-      {/* Mobile View */}
+      {/* Mobile */}
 
       <div className="sm:hidden">
         <div className="bg-blue-100 px-4 py-3">
@@ -172,7 +213,7 @@ text-gray-700
         </div>
 
         <div className="divide-y">
-          {data.map((row, index) => (
+          {visibleData.map((row, index) => (
             <div
               key={index}
               onClick={() => {
@@ -181,47 +222,58 @@ text-gray-700
                 }
               }}
               className={`
-p-4
+              p-4
 
-${rowClickable ? "cursor-pointer hover:bg-gray-50" : ""}
-
-`}
+              ${rowClickable ? "cursor-pointer hover:bg-gray-50" : ""}
+              `}
             >
-              <div className="space-y-2">
-                {columns.map((column) => (
-                  <div key={column.key} className="flex justify-between">
-                    <span className="text-xs text-gray-500">
-                      {column.label}
-                    </span>
+              {columns.map((column) => (
+                <div key={column.key} className="flex justify-between py-1">
+                  <span className="text-xs text-gray-500">{column.label}</span>
 
-                    <span className="text-sm font-medium text-gray-900">
-                      {renderValue(row, column)}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                  <span className="text-sm font-medium text-gray-900">
+                    {renderValue(row, column)}
+                  </span>
+                </div>
+              ))}
             </div>
           ))}
         </div>
       </div>
 
-      {/* See All */}
+      {/* Pagination */}
 
-      {showSeeAll && (
+      {shouldPaginate && (
         <div
-          onClick={onSeeAll}
           className="
-text-center 
-text-sm 
-font-medium
-py-3
-text-gray-600
-border-t
-cursor-pointer
-hover:bg-gray-50
-"
+          flex 
+          justify-end
+  border-t
+  border-t-blue-100
+          px-4
+          py-3
+          "
         >
-          {seeAllText}
+          <div className="flex items-center gap-1">
+            <p className="mr-2">Pages : </p>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`
+                  min-w-6
+                  rounded-full
+                  ${
+                    currentPage === page
+                      ? "bg-blue-400 text-white"
+                      : " hover:bg-gray-50"
+                  }
+                  `}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

@@ -1,14 +1,27 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
+import ResponsiveTable from "../Base/Table";
 
 function Table() {
-  const [groupedData, setGroupedData] = useState([]);
+  const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
     /\/$/,
     "",
   );
+
+  const columns = [
+    { key: "date", label: "DATE" },
+    { key: "time", label: "TIME" },
+    { key: "tank", label: "TANK NO:" },
+    { key: "o2", label: "WATER LEVEL (m)" },
+    { key: "ph", label: "PH LEVEL" },
+    { key: "temp", label: "TEMPERATURE (°C)" },
+    { key: "nh3", label: "SALINITY LEVEL" },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,50 +29,54 @@ function Table() {
         const response = await fetch(
           `${apiBaseUrl}/api/waterquality/sensor-data`,
         );
+
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
+
         const data = await response.json();
 
-        // Transform data to grouped format
-        const grouped = {};
-        data.forEach((item) => {
+        const formattedData = data.map((item) => {
           const dateObj = new Date(item.Date);
-          const date = dateObj.toISOString().split("T")[0].replace(/-/g, "/");
-          const time = convertTime(item.Time);
-          const key = `${date}-${time}`;
-          if (!grouped[key]) {
-            grouped[key] = {
-              date,
-              time,
-              tanks: [],
-            };
-          }
-          grouped[key].tanks.push({
-            tank: item.Pond_ID.toString(),
-            o2: item.Water_Level,
-            ph: item.pH,
-            temp: item.WaterTemp,
-            nh3: item.TDS,
-          });
+
+          return {
+            date: dateObj.toISOString().split("T")[0].replace(/-/g, "/"),
+
+            time: convertTime(item.Time),
+
+            tank: item.Pond_ID?.toString() || "-",
+
+            o2: item.Water_Level ?? "-",
+
+            ph: item.pH ?? "-",
+
+            temp: item.WaterTemp ?? "-",
+
+            nh3: item.TDS ?? "-",
+          };
         });
 
-        const groupedArray = Object.values(grouped);
-        setGroupedData(groupedArray);
+        setRows(formattedData);
         setLoading(false);
       } catch (err) {
+        console.error(err);
         setError(err.message);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [apiBaseUrl]);
 
   const convertTime = (timeStr) => {
+    if (!timeStr) return "-";
+
     const hour = parseInt(timeStr.split(".")[0]);
-    const ampm = hour >= 12 ? "pm" : "am";
+
+    const ampm = hour >= 12 ? "PM" : "AM";
+
     const hour12 = hour % 12 || 12;
+
     return `${hour12.toString().padStart(2, "0")}:00 ${ampm}`;
   };
 
@@ -78,66 +95,13 @@ function Table() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md">
-      <table className="w-full text-left">
-        <thead className="">
-          <tr>
-            <th className="py-2 pl-4 text-center">Date</th>
-            <th className="py-2 text-center">Time</th>
-            <th className="py-2 text-center">Tank No:</th>
-            <th className="py-2 text-center">Water Level (m)</th>
-            <th className="py-2 text-center">pH level</th>
-            <th className="py-2 text-center">Temperature (°C)</th>
-            <th className="py-2 text-center">Salinity Level</th>
-          </tr>
-        </thead>
-        <tbody className="">
-          {groupedData.map((group, groupIdx) => (
-            <React.Fragment key={`${group.date}-${group.time}`}>
-              {group.tanks.map((tank, tankIdx) => (
-                <tr
-                  key={`${group.date}-${group.time}-${tank.tank}`}
-                  className={(groupIdx + tankIdx) % 2 === 0 ? "bg-blue-50" : ""}
-                >
-                  {tankIdx === 0 && (
-                    <>
-                      <td
-                        rowSpan={group.tanks.length}
-                        className="py-2 text-center font-bold text-blue-800"
-                      >
-                        {group.date}
-                      </td>
-                      <td
-                        rowSpan={group.tanks.length}
-                        className="py-2 text-center"
-                      >
-                        {group.time}
-                      </td>
-                    </>
-                  )}
-                  <td className="py-2 text-center">{tank.tank}</td>
-                  <td className="py-2 text-center">{tank.o2}</td>
-                  <td className="py-2 text-center">{tank.ph}</td>
-                  <td className="py-2 text-center">{tank.temp}</td>
-                  <td className="py-2 text-center">{tank.nh3}</td>
-                </tr>
-              ))}
-              {groupIdx < groupedData.length - 1 && (
-                <tr>
-                  <td colSpan={7} className="py-0">
-                    <div className="mx-auto my-2 w-2/3 h-0.5 bg-white rounded"></div>
-                  </td>
-                </tr>
-              )}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
-      <hr className="border-t-2 border-black my-2" />
-      <div className="text-center mt-4 pb-3 cursor-pointer bg-white rounded-lg shadow-md">
-        See All
-      </div>
-    </div>
+    <ResponsiveTable
+      columns={columns}
+      data={rows}
+      loading={loading}
+      error={error}
+      mobileTitle="Water Quality Data"
+    />
   );
 }
 
