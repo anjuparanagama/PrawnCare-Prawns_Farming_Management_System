@@ -13,7 +13,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col p-8 gap-8">
+    <div className="flex min-h-screen flex-col p-4 sm:p-8 gap-8">
       <Header title="Inventory" Download={download} />
       <div className="flex flex-col md:flex-row gap-4">
         <div>

@@ -6,7 +6,7 @@ import Graph from "../components/ordlist/Graph";
 
 export default function App() {
   return (
-    <div className="flex min-h-screen flex-col p-8 gap-4">
+    <div className="flex min-h-screen flex-col p-4 sm:p-8 gap-4">
       <Header title="Order List" />
       <Ordertable />
       <Graph />

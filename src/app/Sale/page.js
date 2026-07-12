@@ -6,7 +6,7 @@ import Graph from "../components/sales/Graph";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col p-8 gap-4">
+    <div className="flex min-h-screen flex-col p-4 sm:p-8 gap-4">
       <Header />
       <Graph />
       <Salestable />
