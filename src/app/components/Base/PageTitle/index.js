@@ -10,9 +10,11 @@ export const Header = ({
   DateRange,
 }) => {
   return (
-    <div className="flex justify-between mb-3">
+    <div className="flex justify-between sm:mb-3">
       <div>
-        <h1 className="text-4xl font-bold text-blue-900">{title}</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold text-blue-900">
+          {title}
+        </h1>
       </div>
       {Download && (
         <div>

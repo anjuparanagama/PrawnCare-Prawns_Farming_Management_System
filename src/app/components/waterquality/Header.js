@@ -69,14 +69,16 @@ function Header() {
             className="border border-gray-300 px-3 py-2 rounded-md text-xs sm:text-sm flex items-center gap-2 shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200"
           >
             <FaRegCalendarAlt className="text-gray-600 text-xs sm:text-sm" />
-            <span className="font-medium">{formattedRange}</span>
+            <span className="font-medium hidden sm:block">
+              {formattedRange}
+            </span>
           </button>
           <button
             onClick={handleDownload}
             className="border border-gray-300 px-3 py-2 rounded-md text-xs sm:text-sm flex items-center gap-2 shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200"
           >
             <FaDownload className="text-gray-600 text-xs sm:text-sm" />
-            <span className="font-medium">Download PDF</span>
+            <span className="font-medium hidden sm:block">Download PDF</span>
           </button>
         </div>
       </div>
